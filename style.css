@@ -1,0 +1,2712 @@
+@import url('https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Baloo+2:wght@400;600;800&display=swap');
+
+/* ============================================================
+   DESIGN TOKENS
+   ============================================================ */
+:root {
+    --red:        #c0392b;
+    --red-dark:   #922b21;
+    --wood:       #c8873c;
+    --wood-dark:  #7b4a14;
+    --wood-light: #e8c48a;
+    --sky-top:    #4fc3f7;
+    --sky-mid:    #81d4fa;
+    --sky-bot:    #b8e4f0;
+    --grass:      #4caf50;
+    --grass-dark: #388e3c;
+    --grass-light:#66bb6a;
+    --hill:       #6abf69;
+    --sun:        #ffd600;
+    --white:      #fff8f0;
+    --pink:       #f48fb1;
+    --pink-dark:  #e91e8c;
+    --wool:       #f5f5f5;
+    --pig-color:  #ffb3ba;
+    --cow-base:   #f5e6d0;
+    --sheep-base: #e0e0e0;
+    --shadow:     rgba(0,0,0,0.18);
+    --radius:     16px;
+}
+
+/* ============================================================
+   RESET / BASE
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: 'Baloo 2', cursive;
+    background: linear-gradient(180deg, var(--sky-top) 0%, var(--sky-mid) 55%, var(--sky-bot) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/* ============================================================
+   SCENE — BACKGROUND
+   ============================================================ */
+.scene {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* SUN */
+.sun {
+    position: absolute;
+    top: 30px; left: 60px;
+    width: 90px; height: 90px;
+    background: radial-gradient(circle, #fff176 30%, var(--sun) 70%);
+    border-radius: 50%;
+    box-shadow: 0 0 40px 15px #fff59d, 0 0 80px 30px #ffd60066;
+    animation: sunPulse 4s ease-in-out infinite;
+    display: flex; align-items: center; justify-content: center;
+}
+@keyframes sunPulse {
+    0%,100% { box-shadow: 0 0 40px 15px #fff59d, 0 0 80px 30px #ffd60066; }
+    50%      { box-shadow: 0 0 55px 22px #fff59d, 0 0 100px 40px #ffd60066; }
+}
+.sun-ray {
+    position: absolute;
+    width: 6px; height: 28px;
+    background: #ffd600;
+    border-radius: 3px;
+    top: 50%; left: 50%;
+    transform-origin: center bottom;
+    animation: rayRotate 12s linear infinite;
+}
+.sun-ray:nth-child(1) { transform: translateX(-50%) rotate(0deg)   translateY(-56px); }
+.sun-ray:nth-child(2) { transform: translateX(-50%) rotate(45deg)  translateY(-56px); }
+.sun-ray:nth-child(3) { transform: translateX(-50%) rotate(90deg)  translateY(-56px); }
+.sun-ray:nth-child(4) { transform: translateX(-50%) rotate(135deg) translateY(-56px); }
+.sun-ray:nth-child(5) { transform: translateX(-50%) rotate(180deg) translateY(-56px); }
+.sun-ray:nth-child(6) { transform: translateX(-50%) rotate(225deg) translateY(-56px); }
+.sun-ray:nth-child(7) { transform: translateX(-50%) rotate(270deg) translateY(-56px); }
+.sun-ray:nth-child(8) { transform: translateX(-50%) rotate(315deg) translateY(-56px); }
+@keyframes rayRotate {
+    from { transform: translateX(-50%) rotate(var(--r,0deg)) translateY(-56px); }
+}
+
+/* CLOUDS */
+@keyframes cloudMove1 { from { transform: translateX(-250px); } to { transform: translateX(110vw); } }
+@keyframes cloudMove2 { from { transform: translateX(110vw) scaleX(-1); } to { transform: translateX(-250px) scaleX(-1); } }
+
+.cloud {
+    position: absolute;
+    background: var(--white);
+    border-radius: 50px;
+    opacity: 0.92;
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.08));
+}
+.cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: inherit;
+    border-radius: 50%;
+}
+.cloud-1 { width: 170px; height: 55px; top: 60px; animation: cloudMove1 60s linear infinite; }
+.cloud-1::before { width: 80px; height: 80px; top: -40px; left: 25px; }
+.cloud-1::after  { width: 100px; height: 100px; top: -50px; right: 18px; }
+.cloud-2 { width: 130px; height: 42px; top: 140px; animation: cloudMove1 90s linear infinite -35s; }
+.cloud-2::before { width: 60px; height: 60px; top: -30px; left: 20px; }
+.cloud-2::after  { width: 80px; height: 80px; top: -40px; right: 14px; }
+.cloud-3 { width: 200px; height: 65px; top: 30px; animation: cloudMove2 75s linear infinite -20s; }
+.cloud-3::before { width: 90px; height: 90px; top: -45px; left: 30px; }
+.cloud-3::after  { width: 120px; height: 120px; top: -55px; right: 22px; }
+
+/* HILLS */
+.hills {
+    position: absolute;
+    bottom: 90px; left: 0;
+    width: 100%;
+    height: 220px;
+    background:
+        radial-gradient(ellipse 380px 220px at 15% 100%, var(--hill) 98%, transparent),
+        radial-gradient(ellipse 420px 200px at 85% 100%, #77c37a 98%, transparent),
+        radial-gradient(ellipse 300px 180px at 50% 105%, #5ab15e 98%, transparent);
+}
+
+/* GRASS GROUND */
+.grass-ground {
+    position: absolute;
+    bottom: 0; left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(180deg, var(--grass-light) 0%, var(--grass) 40%, var(--grass-dark) 100%);
+    border-top: 4px solid #2e7d32;
+}
+
+/* ============================================================
+   ANIMALS LAYER
+   ============================================================ */
+.animals-layer {
+    position: fixed;
+    bottom: 0; left: 0;
+    width: 100%; height: 200px;
+    pointer-events: none;
+    z-index: 5;
+}
+
+/* Shared walk animation */
+@keyframes walkRight {
+    0%   { transform: translateX(-160px); }
+    49%  { transform: translateX(110vw); }
+    50%  { transform: translateX(110vw) scaleX(-1); }
+    99%  { transform: translateX(-160px) scaleX(-1); }
+    100% { transform: translateX(-160px); }
+}
+
+.animal {
+    position: absolute;
+    animation: walkRight linear infinite;
+    cursor: pointer;
+    pointer-events: all;
+}
+/* Leg walk */
+@keyframes legFwd  { 0%,100%{transform:rotate(15deg)} 50%{transform:rotate(-15deg)} }
+@keyframes legBack { 0%,100%{transform:rotate(-15deg)} 50%{transform:rotate(15deg)} }
+@keyframes bodyBob { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-3px)} }
+
+/* ---- COW ---- */
+.cow-body {
+    position: relative;
+    width: 90px; height: 52px;
+    background: var(--cow-base);
+    border-radius: 25px 20px 18px 25px;
+    border: 2px solid #c4a882;
+    animation: bodyBob 0.5s ease-in-out infinite;
+}
+.cow-spot {
+    position: absolute;
+    background: #5d4037;
+    border-radius: 50%;
+}
+.spot1 { width:22px; height:18px; top:6px; left:18px; transform: rotate(-20deg); }
+.spot2 { width:14px; height:12px; top:20px; right:22px; transform: rotate(10deg); }
+
+.cow-head {
+    position: absolute;
+    width: 42px; height: 34px;
+    background: var(--cow-base);
+    border-radius: 16px 12px 14px 18px;
+    border: 2px solid #c4a882;
+    right: -32px; top: -6px;
+}
+.cow-nose {
+    position: absolute;
+    width: 20px; height: 13px;
+    background: #e8c0a8;
+    border-radius: 40%;
+    bottom: 5px; right: 5px;
+    border: 1px solid #c9a090;
+}
+.cow-ear {
+    position: absolute;
+    width: 12px; height: 10px;
+    background: #e8c0a8;
+    border-radius: 50%;
+    top: -6px;
+    border: 2px solid #c4a882;
+}
+.ear-left  { left: 6px; }
+.ear-right { right: 6px; }
+.cow-horn {
+    position: absolute;
+    width: 6px; height: 14px;
+    background: #ffd54f;
+    border-radius: 3px 3px 0 0;
+    top: -16px;
+}
+.horn-left  { left: 8px; transform: rotate(-10deg); }
+.horn-right { right: 10px; transform: rotate(10deg); }
+.eye {
+    position: absolute;
+    width: 7px; height: 7px;
+    background: #1a1a2e;
+    border-radius: 50%;
+    top: 8px; left: 8px;
+    box-shadow: 0 0 0 2px #fff;
+}
+.cow-tail {
+    position: absolute;
+    width: 6px; height: 28px;
+    background: #c4a882;
+    border-radius: 3px;
+    left: -8px; top: 6px;
+    transform: rotate(25deg);
+    transform-origin: top center;
+    animation: tailWag 0.8s ease-in-out infinite;
+}
+@keyframes tailWag { 0%,100%{transform:rotate(25deg)} 50%{transform:rotate(45deg)} }
+
+.cow-udder {
+    position: absolute;
+    width: 24px; height: 12px;
+    background: var(--pink);
+    border-radius: 0 0 12px 12px;
+    bottom: -10px; left: 30px;
+    border: 1px solid #f48fb1;
+}
+
+/* Legs (shared) */
+.leg {
+    position: absolute;
+    width: 12px; height: 26px;
+    background: var(--wood-dark);
+    border-radius: 4px;
+    bottom: -24px;
+}
+.leg1 { left: 12px;  animation: legFwd  0.4s ease-in-out infinite; }
+.leg2 { left: 28px;  animation: legBack 0.4s ease-in-out infinite; }
+.leg3 { right: 28px; animation: legBack 0.4s ease-in-out infinite; }
+.leg4 { right: 12px; animation: legFwd  0.4s ease-in-out infinite; }
+
+/* ---- PIG ---- */
+.pig-body {
+    position: relative;
+    width: 70px; height: 44px;
+    background: var(--pig-color);
+    border-radius: 22px;
+    border: 2px solid #f4a0b0;
+    animation: bodyBob 0.4s ease-in-out infinite;
+}
+.pig-head {
+    position: absolute;
+    width: 38px; height: 32px;
+    background: var(--pig-color);
+    border-radius: 50%;
+    border: 2px solid #f4a0b0;
+    right: -28px; top: -2px;
+}
+.pig-head .eye { top: 7px; left: 7px; }
+.pig-snout {
+    position: absolute;
+    width: 18px; height: 13px;
+    background: #f4a0b0;
+    border-radius: 50%;
+    bottom: 5px; right: 6px;
+    border: 1px solid #e88090;
+    display: flex; align-items: center; justify-content: space-around;
+    padding: 2px 3px;
+}
+.pig-nostril {
+    width: 4px; height: 4px;
+    background: #c06070;
+    border-radius: 50%;
+}
+.pig-ear {
+    position: absolute;
+    width: 14px; height: 18px;
+    background: var(--pig-color);
+    border-radius: 50% 50% 30% 30%;
+    border: 2px solid #f4a0b0;
+    top: -12px;
+    transform: rotate(-10deg);
+}
+.pig-ear.ear-right { right: 5px; transform: rotate(10deg); }
+.pig-ear.ear-left  { left: 5px; }
+.pig-tail {
+    position: absolute;
+    width: 10px; height: 10px;
+    border: 3px solid #f4a0b0;
+    border-radius: 50%;
+    left: -12px; top: 10px;
+    animation: tailWag 0.6s ease-in-out infinite;
+}
+.pig-leg { background: #f4a0b0 !important; height: 20px !important; }
+
+/* ---- CHICKEN ---- */
+.chicken-body {
+    position: relative;
+    width: 46px; height: 38px;
+    background: #ffe082;
+    border-radius: 18px 14px 14px 18px;
+    border: 2px solid #ffca28;
+    animation: bodyBob 0.3s ease-in-out infinite;
+}
+.chicken-head {
+    position: absolute;
+    width: 26px; height: 24px;
+    background: #ffe082;
+    border-radius: 50%;
+    border: 2px solid #ffca28;
+    right: -20px; top: -8px;
+}
+.chicken-head .eye { top: 7px; left: 5px; width: 5px; height: 5px; }
+.chicken-beak {
+    position: absolute;
+    width: 0; height: 0;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 10px solid #ff8f00;
+    right: -9px; top: 9px;
+}
+.chicken-comb {
+    position: absolute;
+    width: 8px; height: 12px;
+    background: #f44336;
+    border-radius: 4px 4px 0 0;
+    top: -10px; right: 5px;
+}
+.chicken-wattle {
+    position: absolute;
+    width: 6px; height: 8px;
+    background: #f44336;
+    border-radius: 50%;
+    bottom: 0px; right: 3px;
+}
+.chicken-tail {
+    position: absolute;
+    width: 18px; height: 14px;
+    background: #ffb300;
+    border-radius: 2px 10px 2px 2px;
+    left: -14px; top: 5px;
+    transform: rotate(-20deg);
+}
+.chicken-wing {
+    position: absolute;
+    width: 22px; height: 14px;
+    background: #ffd54f;
+    border-radius: 50%;
+    border: 1px solid #ffca28;
+}
+.wing-left  { top: 5px; left: 4px; transform: rotate(15deg); animation: wingFlap 0.4s ease-in-out infinite; }
+.wing-right { top: 12px; left: 10px; opacity: 0.6; }
+@keyframes wingFlap { 0%,100%{transform:rotate(15deg)} 50%{transform:rotate(30deg)} }
+.chicken-leg {
+    position: absolute;
+    width: 4px; height: 16px;
+    background: #ff8f00;
+    border-radius: 2px;
+    bottom: -14px;
+}
+.chicken-leg.leg-a { left: 12px; animation: legFwd 0.3s ease-in-out infinite; }
+.chicken-leg.leg-b { left: 22px; animation: legBack 0.3s ease-in-out infinite; }
+
+/* ---- SHEEP ---- */
+.sheep-body {
+    position: relative;
+    width: 72px; height: 48px;
+    background: var(--sheep-base);
+    border-radius: 20px;
+    border: 2px solid #bdbdbd;
+    animation: bodyBob 0.5s ease-in-out infinite;
+}
+.sheep-wool {
+    position: absolute;
+    background: var(--wool);
+    border-radius: 50%;
+    border: 2px solid #e0e0e0;
+}
+.wool1 { width: 32px; height: 28px; top: -12px; left: 8px; }
+.wool2 { width: 28px; height: 26px; top: -10px; right: 10px; }
+.wool3 { width: 22px; height: 20px; top: -8px; left: 28px; }
+.sheep-head {
+    position: absolute;
+    width: 32px; height: 28px;
+    background: #e0e0e0;
+    border-radius: 50%;
+    border: 2px solid #bdbdbd;
+    right: -24px; top: 2px;
+}
+.sheep-head .eye { top: 7px; left: 6px; width: 5px; height: 5px; }
+.sheep-ear {
+    position: absolute;
+    width: 10px; height: 14px;
+    background: #d0d0d0;
+    border-radius: 50%;
+    border: 2px solid #bdbdbd;
+    top: -8px;
+}
+.sheep-ear.ear-left  { left: 4px; }
+.sheep-ear.ear-right { right: 4px; }
+.sheep-nose {
+    position: absolute;
+    width: 12px; height: 8px;
+    background: #c0a0a0;
+    border-radius: 50%;
+    bottom: 5px; right: 7px;
+}
+.sheep-leg { background: #9e9e9e !important; height: 22px !important; }
+
+/* SPEECH BUBBLES */
+.speech-bubble {
+    position: absolute;
+    top: -44px; left: 50%;
+    transform: translateX(-50%);
+    background: white;
+    border: 2px solid #ccc;
+    border-radius: 12px;
+    padding: 4px 10px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+}
+.speech-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -8px; left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid white;
+}
+.speech-bubble.show { opacity: 1; }
+
+/* ============================================================
+   FENCE
+   ============================================================ */
+.fence-row {
+    position: fixed;
+    bottom: 88px; left: 0;
+    width: 100%;
+    display: flex;
+    align-items: flex-start;
+    z-index: 6;
+    pointer-events: none;
+    overflow: hidden;
+    height: 60px;
+    padding: 0 10px;
+    gap: 0;
+}
+.fence-post {
+    width: 14px; height: 60px;
+    background: linear-gradient(180deg, var(--wood-light), var(--wood));
+    border-radius: 3px 3px 0 0;
+    border: 1px solid var(--wood-dark);
+    flex-shrink: 0;
+    min-width: 14px;
+    margin: 0 -1px;
+}
+.fence-rail {
+    flex: 1;
+    height: 10px;
+    background: linear-gradient(180deg, var(--wood-light), var(--wood));
+    border: 1px solid var(--wood-dark);
+    border-radius: 3px;
+    margin-top: 12px;
+    min-width: 0;
+}
+
+/* ============================================================
+   BARN
+   ============================================================ */
+.barn {
+    position: relative;
+    z-index: 10;
+    width: min(520px, 94vw);
+    margin-bottom: 100px;
+    cursor: pointer;
+    filter: drop-shadow(0 10px 30px rgba(0,0,0,0.35));
+}
+
+/* ROOF */
+.barn-roof {
+    position: relative;
+    height: 0;
+    border-left: calc(min(520px, 94vw) / 2 + 12px) solid transparent;
+    border-right: calc(min(520px, 94vw) / 2 + 12px) solid transparent;
+    border-bottom: 130px solid var(--red-dark);
+    filter: drop-shadow(0 -4px 8px rgba(0,0,0,0.2));
+}
+.barn-roof::after {
+    content: '';
+    position: absolute;
+    bottom: -133px;
+    left: calc(-1 * (min(520px, 94vw) / 2 + 12px));
+    width: calc(min(520px, 94vw) + 24px);
+    height: 16px;
+    background: var(--red);
+    border-radius: 4px;
+}
+.weather-vane {
+    position: absolute;
+    top: -130px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center;
+    animation: wvSpin 3s ease-in-out infinite;
+}
+@keyframes wvSpin { 0%,100%{transform:translateX(-50%) rotate(0deg)} 50%{transform:translateX(-50%) rotate(25deg)} }
+.wv-arrow { font-size: 18px; color: #ffd600; }
+.wv-pole  { width: 3px; height: 30px; background: #888; }
+.wv-star  { font-size: 14px; color: #ffd600; }
+
+/* BARN BODY */
+.barn-inside {
+    background: linear-gradient(180deg, #c8873c 0%, #a0632a 100%);
+    border: 4px solid var(--wood-dark);
+    border-top: none;
+    overflow-y: auto;
+    max-height: 75vh;
+}
+
+/* DOORS */
+.barn-door {
+    position: absolute;
+    top: 0; bottom: 0;
+    width: 50%;
+    background: linear-gradient(180deg, var(--red) 0%, var(--red-dark) 100%);
+    border: 5px solid var(--red-dark);
+    box-sizing: border-box;
+    z-index: 20;
+    transition: transform 1.4s cubic-bezier(0.77, 0, 0.175, 1);
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+}
+.barn-door.left  { left: 0;  transform-origin: left;  border-radius: 0 0 0 6px; }
+.barn-door.right { right: 0; transform-origin: right; border-radius: 0 0 6px 0; }
+
+.barn.open .barn-door.left  { transform: perspective(800px) rotateY(-145deg); }
+.barn.open .barn-door.right { transform: perspective(800px) rotateY(145deg); }
+
+.door-planks {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+        180deg, transparent 0, transparent 34px, rgba(0,0,0,0.1) 34px, rgba(0,0,0,0.1) 36px
+    );
+}
+.cross-beam {
+    position: absolute;
+    width: 140%;
+    height: 12px;
+    background: var(--red-dark);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    border-radius: 3px;
+}
+.cross-beam:nth-of-type(2) { transform: rotate(38deg); }
+.cross-beam:nth-of-type(3) { transform: rotate(-38deg); }
+.door-handle {
+    position: absolute;
+    right: 10px; top: 50%;
+    width: 12px; height: 30px;
+    background: #ffd600;
+    border-radius: 6px;
+    transform: translateY(-50%);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.4);
+}
+.right-handle { left: 10px; right: auto; }
+
+.door-label {
+    text-align: center;
+    color: white;
+    z-index: 1;
+}
+.knock-ico { font-size: 2rem; display: block; animation: knockAnim 1.5s ease-in-out infinite; }
+@keyframes knockAnim { 0%,100%{transform:rotate(-10deg)} 50%{transform:rotate(10deg)} }
+.door-label p {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1.1rem;
+    text-shadow: 1px 1px 3px #000;
+    margin-top: 6px;
+    line-height: 1.3;
+}
+
+/* ============================================================
+   INSIDE CONTENT
+   ============================================================ */
+.scroll-content {
+    padding: 28px 30px 36px;
+    text-align: center;
+}
+
+/* Title */
+.title-block {
+    position: relative;
+    margin-bottom: 10px;
+}
+.title-hat {
+    font-size: 4rem;
+    display: block;
+    animation: hatBounce 1.2s ease-in-out infinite;
+}
+@keyframes hatBounce { 0%,100%{transform:translateY(0) rotate(-5deg)} 50%{transform:translateY(-8px) rotate(5deg)} }
+.star-burst {
+    font-size: 2rem;
+    animation: spin 4s linear infinite;
+    display: inline-block;
+    position: absolute; top: 0; right: 10px;
+}
+@keyframes spin { from{transform:rotate(0)} to{transform:rotate(360deg)} }
+
+h1 {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: clamp(1.8rem, 6vw, 3rem);
+    color: var(--sun);
+    text-shadow: 3px 3px 0 var(--red-dark), 5px 5px 0 rgba(0,0,0,0.3);
+    line-height: 1.1;
+    letter-spacing: 2px;
+}
+h1 span {
+    color: var(--white);
+    font-size: clamp(2rem, 7vw, 3.6rem);
+}
+
+/* Banner */
+.banner-tape {
+    display: inline-block;
+    background: linear-gradient(90deg, #f44336, #e91e63, #f44336);
+    color: white;
+    font-family: 'Luckiest Guy', cursive;
+    font-size: clamp(0.7rem, 2.5vw, 0.95rem);
+    letter-spacing: 2px;
+    padding: 7px 18px;
+    border-radius: 4px;
+    margin: 10px 0 18px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.3);
+    transform: rotate(-1.5deg);
+    display: block;
+}
+
+/* Info cards */
+.info-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(4px);
+    border: 2px solid rgba(255,255,255,0.35);
+    border-radius: var(--radius);
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    text-align: left;
+    transition: transform 0.2s, background 0.2s;
+    animation: cardFadeIn 0.5s ease both;
+}
+.info-card:hover {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.28);
+}
+.info-icon { font-size: 1.9rem; flex-shrink: 0; }
+.info-text { display: flex; flex-direction: column; }
+.info-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--wood-light);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.info-text strong {
+    font-size: clamp(0.95rem, 3vw, 1.2rem);
+    font-weight: 800;
+    color: var(--white);
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+}
+
+/* Phrase */
+.invite-phrase {
+    font-size: clamp(1rem, 3.5vw, 1.25rem);
+    color: var(--white);
+    font-weight: 600;
+    margin: 16px 0 8px;
+    line-height: 1.5;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+.invite-phrase em { color: var(--sun); font-style: normal; font-weight: 800; }
+
+/* Animals row */
+.animals-row {
+    font-size: clamp(1.4rem, 5vw, 2.1rem);
+    margin: 10px 0 18px;
+    letter-spacing: 4px;
+    animation: waddleRow 2s ease-in-out infinite;
+    display: inline-block;
+}
+@keyframes waddleRow { 0%,100%{transform:rotate(-2deg)} 50%{transform:rotate(2deg)} }
+
+/* Button */
+button#confirmBtn {
+    font-family: 'Luckiest Guy', cursive;
+    background: linear-gradient(135deg, var(--grass) 0%, var(--grass-dark) 100%);
+    color: white;
+    border: none;
+    padding: 15px 34px;
+    font-size: clamp(1rem, 4vw, 1.45rem);
+    border-radius: 50px;
+    cursor: pointer;
+    letter-spacing: 1px;
+    box-shadow: 0 6px 0 #1b5e20, 0 8px 20px rgba(0,0,0,0.35);
+    transition: transform 0.15s, box-shadow 0.15s;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+    display: inline-block;
+    animation: btnPulse 2s ease-in-out infinite;
+}
+@keyframes btnPulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.04)} }
+button#confirmBtn:hover {
+    transform: translateY(-3px) scale(1.04);
+    box-shadow: 0 9px 0 #1b5e20, 0 12px 25px rgba(0,0,0,0.4);
+    animation: none;
+}
+button#confirmBtn:active {
+    transform: translateY(3px);
+    box-shadow: 0 3px 0 #1b5e20, 0 5px 15px rgba(0,0,0,0.3);
+}
+button#confirmBtn:disabled {
+    background: linear-gradient(135deg, #9e9e9e, #757575);
+    box-shadow: 0 4px 0 #424242;
+    cursor: not-allowed;
+    animation: none;
+}
+
+.footer-note {
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--wood-light);
+    margin-top: 14px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+/* ============================================================
+   SOUND BUTTON
+   ============================================================ */
+.sound-btn {
+    position: fixed;
+    bottom: 110px; right: 18px;
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.9);
+    border: 3px solid var(--wood);
+    font-size: 1.4rem;
+    cursor: pointer;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: transform 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0;
+}
+.sound-btn:hover { transform: scale(1.1); }
+
+/* ============================================================
+   FALLING ITEMS
+   ============================================================ */
+.falling-items {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 200;
+    overflow: hidden;
+}
+.fall-item {
+    position: absolute;
+    top: -60px;
+    font-size: 1.8rem;
+    animation: fallDown linear forwards;
+    pointer-events: none;
+}
+@keyframes fallDown {
+    0%   { opacity: 1; transform: translateY(0) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(105vh) rotate(720deg); }
+}
+
+/* ============================================================
+   CARD FADE-IN KEYFRAME
+   ============================================================ */
+@keyframes cardFadeIn {
+    from { opacity:0; transform: translateY(20px); }
+    to   { opacity:1; transform: translateY(0); }
+}
+.info-card:nth-child(1) { animation-delay: 0.3s; }
+.info-card:nth-child(2) { animation-delay: 0.5s; }
+.info-card:nth-child(3) { animation-delay: 0.7s; }
+
+/* ============================================================
+   FEATURE 1: MODO NOTURNO (body.night-mode)
+   ============================================================ */
+body.night-mode {
+    background: linear-gradient(180deg, #0d1b2a 0%, #1b2a3b 55%, #243344 100%) !important;
+}
+body.night-mode .scene { background: transparent; }
+body.night-mode .hills { filter: brightness(0.35); }
+body.night-mode .grass-ground { filter: brightness(0.3); }
+body.night-mode .cloud { opacity: 0.2; }
+body.night-mode #sun { opacity: 0; }
+body.night-mode #moon { opacity: 1 !important; }
+body.night-mode .stars-layer { opacity: 1 !important; }
+body.night-mode .fireflies-layer { opacity: 1 !important; }
+body.night-mode .barn-inside { background: linear-gradient(180deg,#5c3a1e,#3b220d) !important; }
+
+/* FEATURE 2: LUA */
+.moon {
+    position: absolute;
+    top: 20px; right: 80px;
+    font-size: 4rem;
+    opacity: 0;
+    transition: opacity 2s;
+    filter: drop-shadow(0 0 20px #fffde7);
+    animation: moonGlow 4s ease-in-out infinite;
+}
+@keyframes moonGlow { 0%,100%{filter:drop-shadow(0 0 14px #fffde7)} 50%{filter:drop-shadow(0 0 30px #fff9c4)} }
+
+/* FEATURE 3: ESTRELAS */
+.stars-layer {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 2s;
+    pointer-events: none;
+}
+.star-dot {
+    position: absolute;
+    background: white;
+    border-radius: 50%;
+    animation: twinkle 1.5s ease-in-out infinite;
+}
+@keyframes twinkle { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:0.2;transform:scale(0.5)} }
+
+/* FEATURE 4: VAGA-LUMES */
+.fireflies-layer {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity 2s;
+    pointer-events: none;
+}
+.firefly {
+    position: absolute;
+    width: 6px; height: 6px;
+    background: #e8ff00;
+    border-radius: 50%;
+    box-shadow: 0 0 6px 3px #c8ff00aa;
+    animation: fireflyFloat linear infinite;
+}
+@keyframes fireflyFloat {
+    0%   { transform: translate(0,0); opacity:0; }
+    10%  { opacity: 1; }
+    50%  { transform: translate(var(--fx,30px), var(--fy,-40px)); opacity: 0.9; }
+    90%  { opacity: 0.3; }
+    100% { transform: translate(var(--fx2,60px), var(--fy2,20px)); opacity: 0; }
+}
+
+/* FEATURE 5: ARCO-ÍRIS */
+.rainbow {
+    position: absolute;
+    top: 60px; left: 50%;
+    transform: translateX(-50%);
+    width: 600px; height: 300px;
+    border-radius: 300px 300px 0 0;
+    opacity: 0;
+    transition: opacity 1.5s;
+    background: transparent;
+    box-shadow:
+        inset 0 0 0 20px rgba(255,0,0,0.35),
+        inset 0 0 0 40px rgba(255,165,0,0.3),
+        inset 0 0 0 60px rgba(255,255,0,0.3),
+        inset 0 0 0 80px rgba(0,200,0,0.3),
+        inset 0 0 0 100px rgba(0,0,255,0.25),
+        inset 0 0 0 120px rgba(128,0,128,0.2);
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+.rainbow.show { opacity: 1; }
+
+/* FEATURE 6: BALÃO DE AR QUENTE */
+.hot-air-balloon {
+    position: absolute;
+    top: 30px; right: 180px;
+    display: flex; flex-direction: column; align-items: center;
+    animation: balloonFloat 8s ease-in-out infinite;
+    z-index: 2;
+    font-size: 1.1rem;
+}
+.balloon-body { font-size: 4rem; line-height: 1; }
+.balloon-basket { font-size: 1.4rem; margin-top: -6px; }
+@keyframes balloonFloat {
+    0%,100% { transform: translateY(0) rotate(-3deg); }
+    50%      { transform: translateY(-25px) rotate(3deg); }
+}
+
+/* FEATURE 7: PÁSSAROS EM VÔO */
+@keyframes birdFly {
+    0%   { transform: translateX(-80px) translateY(0); }
+    25%  { transform: translateX(25vw) translateY(-18px); }
+    50%  { transform: translateX(50vw) translateY(0px); }
+    75%  { transform: translateX(75vw) translateY(-12px); }
+    100% { transform: translateX(110vw) translateY(0); }
+}
+.bird {
+    position: absolute;
+    top: 80px;
+    font-size: 1.6rem;
+    animation: birdFly 18s linear infinite;
+    filter: brightness(0.4);
+}
+.bird::before, .bird::after {
+    content: '';
+    position: absolute;
+    width: 18px; height: 7px;
+    border-top: 3px solid #333;
+    border-radius: 50% 50% 0 0;
+}
+.bird::before { left: 0; transform: rotate(-20deg); animation: wingBeat 0.4s ease-in-out infinite; }
+.bird::after  { left: 16px; transform: rotate(20deg); animation: wingBeat 0.4s ease-in-out infinite 0.2s; }
+@keyframes wingBeat { 0%,100%{transform:rotate(-20deg)} 50%{transform:rotate(-40deg)} }
+.bird2 { top: 110px; animation-duration: 22s; animation-delay: -6s; font-size: 1.2rem; }
+.bird2::before, .bird2::after { width: 14px; height: 5px; }
+
+/* FEATURE 8: BORBOLETAS */
+.butterfly {
+    position: absolute;
+    font-size: 1.8rem;
+    animation: butterflyFly 14s ease-in-out infinite;
+    z-index: 4;
+}
+.butterfly2 { font-size: 1.4rem; animation-duration: 20s; animation-delay: -8s; top: 55%; }
+@keyframes butterflyFly {
+    0%   { transform: translate(-100px, 0px) rotate(0deg); }
+    20%  { transform: translate(20vw, -40px) rotate(10deg); }
+    40%  { transform: translate(40vw, 10px) rotate(-8deg); }
+    60%  { transform: translate(60vw, -30px) rotate(5deg); }
+    80%  { transform: translate(80vw, 5px) rotate(-5deg); }
+    100% { transform: translate(110vw, -15px) rotate(0deg); }
+}
+
+/* FEATURE 9: BANDEIRINHAS (BUNTING) */
+.bunting {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%;
+    height: 60px;
+    z-index: 50;
+    pointer-events: none;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    padding: 0 20px;
+}
+.bunting-string {
+    position: absolute;
+    top: 12px; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--wood-dark), var(--red), var(--sun), var(--wood-dark));
+    border-radius: 2px;
+}
+.flag {
+    font-size: 1.8rem;
+    position: relative;
+    top: 0;
+    animation: flagSwing 2s ease-in-out infinite;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3));
+}
+.flag:nth-child(odd)  { animation-delay: 0s; }
+.flag:nth-child(even) { animation-delay: 0.5s; }
+@keyframes flagSwing { 0%,100%{transform:rotate(-8deg)} 50%{transform:rotate(8deg)} }
+
+/* FEATURE 10: COUNTDOWN */
+.countdown-box {
+    position: fixed;
+    top: 68px; left: 50%;
+    transform: translateX(-50%);
+    background: rgba(192,57,43,0.92);
+    backdrop-filter: blur(8px);
+    border: 2px solid rgba(255,255,255,0.35);
+    border-radius: 14px;
+    padding: 8px 18px;
+    z-index: 50;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    white-space: nowrap;
+}
+.cd-label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #ffecb3;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+.cd-digits {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+.cd-unit {
+    display: flex; flex-direction: column; align-items: center;
+    background: rgba(0,0,0,0.3);
+    border-radius: 8px;
+    padding: 4px 8px;
+    min-width: 40px;
+}
+.cd-unit span {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1.3rem;
+    color: var(--sun);
+    line-height: 1;
+}
+.cd-unit small { font-size: 0.55rem; color: #ffecb3; font-weight: 600; }
+.cd-sep { color: var(--sun); font-family: 'Luckiest Guy'; font-size: 1.2rem; margin-bottom: 10px; }
+
+/* FEATURE 11: TRATOR */
+.tractor {
+    position: fixed;
+    bottom: 90px;
+    left: -150px;
+    z-index: 7;
+    animation: tractorDrive 30s linear infinite;
+    pointer-events: none;
+}
+.tractor-cab { font-size: 3.5rem; display: block; }
+.tractor-smoke {
+    position: absolute;
+    top: -10px; right: 10px;
+    width: 12px; height: 12px;
+    background: rgba(180,180,180,0.7);
+    border-radius: 50%;
+    animation: smokePuff 0.6s ease-out infinite;
+}
+@keyframes tractorDrive { 0%{left:-150px} 100%{left:110vw} }
+@keyframes smokePuff {
+    0%   { transform: translateY(0) scale(1); opacity: 0.8; }
+    100% { transform: translateY(-30px) scale(2.5); opacity: 0; }
+}
+
+/* FEATURE 12: ESPANTALHO */
+.scarecrow {
+    position: fixed;
+    bottom: 120px;
+    right: 80px;
+    z-index: 7;
+    display: flex; flex-direction: column; align-items: center;
+    pointer-events: none;
+}
+.sc-hat  { font-size: 1.8rem; margin-bottom: -4px; animation: scarecrowSway 4s ease-in-out infinite; }
+.sc-head { font-size: 1.5rem; animation: scarecrowSway 4s ease-in-out infinite; }
+.sc-body {
+    position: relative;
+    width: 50px; height: 30px;
+    background: #8B4513;
+    border-radius: 4px;
+    display: flex; align-items: center; justify-content: space-between;
+    animation: scarecrowSway 4s ease-in-out infinite;
+}
+.sc-arm { font-size: 1.1rem; animation: armWave 2s ease-in-out infinite; }
+.right-arm { animation-delay: 0.5s; }
+.sc-post { width: 6px; height: 50px; background: #5D4037; border-radius: 2px; }
+@keyframes scarecrowSway { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg)} }
+@keyframes armWave { 0%,100%{transform:rotate(-20deg)} 50%{transform:rotate(20deg)} }
+
+/* FEATURE 13: MOINHO DE VENTO */
+.windmill {
+    position: fixed;
+    bottom: 95px;
+    left: 30px;
+    z-index: 7;
+    display: flex; flex-direction: column; align-items: center;
+    pointer-events: none;
+}
+.wm-base {
+    width: 24px; height: 70px;
+    background: linear-gradient(180deg, #e0c080, #b8942c);
+    border-radius: 4px 4px 0 0;
+    clip-path: polygon(20% 100%, 80% 100%, 70% 0%, 30% 0%);
+}
+.wm-hub {
+    position: absolute;
+    top: 0; left: 50%;
+    transform: translateX(-50%);
+    width: 14px; height: 14px;
+    background: #7b4a14;
+    border-radius: 50%;
+    z-index: 2;
+}
+.wm-blades {
+    position: absolute;
+    top: 7px; left: 50%;
+    transform-origin: 0% 0%;
+    animation: windmillSpin 3s linear infinite;
+}
+@keyframes windmillSpin { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+.wm-blade {
+    position: absolute;
+    width: 28px; height: 8px;
+    background: #d4a832;
+    border-radius: 4px 10px 10px 4px;
+    transform-origin: 0% 50%;
+    top: -4px; left: 0;
+}
+.b1 { transform: rotate(0deg); }
+.b2 { transform: rotate(90deg); }
+.b3 { transform: rotate(180deg); }
+.b4 { transform: rotate(270deg); }
+
+/* FEATURE 14: BOTÕES FLUTUANTES */
+.float-btns {
+    position: fixed;
+    bottom: 110px; right: 14px;
+    display: flex; flex-direction: column; gap: 10px;
+    z-index: 100;
+}
+.float-btns button {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.92);
+    border: 3px solid var(--wood);
+    font-size: 1.3rem;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transition: transform 0.2s, background 0.2s;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0;
+    font-family: inherit;
+}
+.float-btns button:hover { transform: scale(1.15); background: white; }
+.sound-btn, .share-btn, .piano-btn, .rainbow-btn { animation: none !important; }
+
+/* FEATURE 15: PIANO PANEL */
+.piano-panel {
+    position: fixed;
+    bottom: 0; left: 50%;
+    transform: translateX(-50%) translateY(100%);
+    background: linear-gradient(180deg, #2c1a0e, #1a0f06);
+    border: 3px solid var(--wood);
+    border-bottom: none;
+    border-radius: 16px 16px 0 0;
+    padding: 16px 16px 20px;
+    z-index: 300;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-width: min(98vw, 560px);
+    text-align: center;
+    box-shadow: 0 -8px 30px rgba(0,0,0,0.5);
+}
+.piano-panel.open { transform: translateX(-50%) translateY(0); }
+.piano-title {
+    font-family: 'Luckiest Guy', cursive;
+    color: var(--sun);
+    font-size: 1.3rem;
+    margin-bottom: 12px;
+}
+.piano-keys {
+    display: flex;
+    position: relative;
+    height: 80px;
+    justify-content: center;
+    gap: 2px;
+    margin-bottom: 12px;
+}
+.pk {
+    border-radius: 0 0 6px 6px;
+    cursor: pointer;
+    display: flex; align-items: flex-end; justify-content: center;
+    padding-bottom: 4px;
+    font-size: 0.55rem;
+    font-weight: 700;
+    transition: filter 0.1s, transform 0.1s;
+    user-select: none;
+}
+.pk.white {
+    width: 36px; height: 80px;
+    background: linear-gradient(180deg, #f5f5f5, #e0e0e0);
+    border: 1px solid #aaa;
+    color: #666;
+    z-index: 1;
+}
+.pk.black {
+    width: 24px; height: 52px;
+    background: linear-gradient(180deg, #333, #111);
+    border: 1px solid #000;
+    color: transparent;
+    margin: 0 -12px;
+    z-index: 2;
+    align-self: flex-start;
+}
+.pk:active, .pk.pressed { filter: brightness(0.75); transform: translateY(2px); }
+.piano-auto-btns { display: flex; gap: 10px; justify-content: center; margin-bottom: 10px; flex-wrap: wrap; }
+.piano-play-btn {
+    background: linear-gradient(135deg, var(--red), var(--red-dark));
+    color: white; border: none;
+    padding: 8px 18px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Baloo 2', cursive;
+    font-weight: 700; font-size: 0.9rem;
+    transition: transform 0.15s;
+}
+.piano-play-btn:hover { transform: scale(1.05); }
+.piano-close {
+    background: transparent; color: #aaa;
+    border: 1px solid #555;
+    padding: 5px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.85rem;
+    transition: color 0.2s;
+}
+.piano-close:hover { color: white; }
+
+/* FEATURE 16: MOUSE TRAIL */
+.mouse-trail { position: fixed; inset: 0; pointer-events: none; z-index: 400; overflow: hidden; }
+.trail-dot {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    animation: trailFade 0.6s linear forwards;
+}
+@keyframes trailFade { 0%{opacity:0.9;transform:scale(1)} 100%{opacity:0;transform:scale(0)} }
+
+/* FEATURE 17: TOAST */
+.toast {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(30,30,30,0.9);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-family: 'Baloo 2', cursive;
+    font-size: 1rem;
+    font-weight: 600;
+    z-index: 500;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.4s;
+    opacity: 0;
+    pointer-events: none;
+    white-space: nowrap;
+    border: 2px solid rgba(255,255,255,0.2);
+}
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* FEATURE 18: GIRASSÓIS NO CHÃO */
+.sunflowers-ground {
+    position: fixed;
+    bottom: 90px; left: 0;
+    width: 100%; height: 80px;
+    pointer-events: all;
+    z-index: 4;
+}
+.sunflower {
+    position: absolute;
+    bottom: 0;
+    font-size: 2rem;
+    animation: sunflowerGrow 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    transform-origin: bottom center;
+    pointer-events: none;
+}
+@keyframes sunflowerGrow {
+    0%   { transform: scaleY(0) rotate(-20deg); opacity: 0; }
+    100% { transform: scaleY(1) rotate(0deg); opacity: 1; }
+}
+
+/* FEATURE 19: CONTENT DENTRO DA SIDEBAR - CONTADOR DE DIAS */
+.days-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: linear-gradient(135deg, #f44336, #e91e63);
+    color: white;
+    border-radius: 30px;
+    padding: 8px 18px;
+    margin-bottom: 14px;
+    font-weight: 700;
+    font-size: 0.95rem;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+    animation: badgeBounce 1.5s ease-in-out infinite;
+}
+@keyframes badgeBounce { 0%,100%{transform:scale(1)} 50%{transform:scale(1.05)} }
+
+/* FEATURE 20: PARTÍCULAS DE PALHA/VENTO */
+.wind-particle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 3;
+    animation: windBlow linear infinite;
+    font-size: 1rem;
+    opacity: 0.7;
+}
+@keyframes windBlow {
+    0%   { transform: translate(0, 0) rotate(0deg); opacity: 0.7; }
+    100% { transform: translate(var(--wx,200px), var(--wy,30px)) rotate(360deg); opacity: 0; }
+}
+
+/* FEATURE 21: ANIMAÇÃO DE ENTRADA DO BARN */
+@keyframes barnEntrance {
+    0%   { opacity: 0; transform: scale(0.7) translateY(60px); }
+    100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+.barn { animation: barnEntrance 1s cubic-bezier(0.34, 1.56, 0.64, 1) forwards; }
+
+/* FEATURE 22: SHIMMERING NOS CARDS */
+.info-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: var(--radius);
+    background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%);
+    background-size: 200% 100%;
+    animation: shimmer 3s infinite;
+    pointer-events: none;
+}
+.info-card { position: relative; overflow: hidden; }
+@keyframes shimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* FEATURE 23: EFEITO HOVER NOS ANIMAIS */
+.animal:hover { filter: drop-shadow(0 0 12px rgba(255,215,0,0.8)); transform-origin: bottom center; }
+
+/* FEATURE 24: PROGRESS BAR DE CONTAGEM */
+.progress-bar-wrap {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 5px;
+    background: rgba(0,0,0,0.2);
+    z-index: 200;
+}
+.progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sun), #ff6f00, var(--sun));
+    background-size: 200% 100%;
+    animation: progressShimmer 2s linear infinite;
+    transition: width 1s linear;
+}
+@keyframes progressShimmer { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* FEATURE 25: TOOLTIP NOS BOTÕES FLUTUANTES */
+.float-btns button::after {
+    content: attr(title);
+    position: absolute;
+    right: 56px;
+    background: rgba(0,0,0,0.8);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+    font-family: 'Baloo 2', cursive;
+}
+.float-btns button:hover::after { opacity: 1; }
+.float-btns button { position: relative; }
+
+/* FEATURE 26: EFEITO GLOW NOS BOTÕES FLUTUANTES */
+.share-btn { border-color: #25D366 !important; }
+.share-btn:hover { box-shadow: 0 0 15px #25D366 !important; }
+.piano-btn { border-color: #9c27b0 !important; }
+.piano-btn:hover { box-shadow: 0 0 15px #9c27b0 !important; }
+.rainbow-btn { border-color: #03a9f4 !important; }
+.rainbow-btn:hover { box-shadow: 0 0 15px #03a9f4 !important; }
+.music-bg-btn { border-color: #2e7d32 !important; background: rgba(46,125,50,0.15) !important; }
+.music-bg-btn:hover { box-shadow: 0 0 15px #66bb6a !important; }
+.music-bg-btn.playing {
+    border-color: #ffd600 !important;
+    background: linear-gradient(135deg, rgba(255,107,53,0.3), rgba(255,214,0,0.3)) !important;
+    animation: musicPulse 1.2s ease-in-out infinite;
+}
+@keyframes musicPulse {
+    0%,100% { box-shadow: 0 4px 15px rgba(255,214,0,0.4); transform: scale(1); }
+    50%      { box-shadow: 0 6px 22px rgba(255,214,0,0.8); transform: scale(1.07); }
+}
+
+
+/* FEATURE 27: BOTÃO CONFIRMAR - PARTÍCULAS NA BORDA */
+@keyframes borderGlow {
+    0%,100% { box-shadow: 0 6px 0 #1b5e20, 0 8px 20px rgba(76,175,80,0.35); }
+    50%      { box-shadow: 0 6px 0 #1b5e20, 0 8px 30px rgba(76,175,80,0.7), 0 0 40px rgba(76,175,80,0.3); }
+}
+button#confirmBtn { animation: borderGlow 2s ease-in-out infinite !important; }
+
+/* FEATURE 28: GALINHA DEIXA RASTRO DE PENAS */
+.feather {
+    position: fixed;
+    font-size: 1rem;
+    pointer-events: none;
+    z-index: 4;
+    animation: featherFall linear forwards;
+}
+@keyframes featherFall {
+    0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(80px) rotate(180deg) translateX(30px); opacity: 0; }
+}
+
+/* FEATURE 29: EASTER EGG - UFO */
+.ufo {
+    position: fixed;
+    top: -120px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 4rem;
+    z-index: 250;
+    animation: ufoLand 3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    pointer-events: none;
+    filter: drop-shadow(0 0 20px #00ff88);
+}
+@keyframes ufoLand {
+    0%   { top: -120px; }
+    50%  { top: 20%; }
+    70%  { top: 15%; }
+    85%  { top: 18%; }
+    100% { top: 16%; }
+}
+.ufo.go-away {
+    animation: ufoLeave 2s ease-in forwards !important;
+}
+@keyframes ufoLeave {
+    0%   { top: 16%; opacity: 1; }
+    100% { top: -150px; opacity: 0; }
+}
+
+/* FEATURE 30: CONFETTI MAIS RICO */
+.confetti-piece {
+    position: fixed;
+    width: 10px; height: 10px;
+    pointer-events: none;
+    z-index: 250;
+    animation: confettiFall linear forwards;
+    border-radius: 2px;
+}
+@keyframes confettiFall {
+    0%   { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* FEATURE 31: ANIMAÇÃO DO BEM VINDO */
+@keyframes welcomeSlide {
+    0%   { transform: translateX(-50%) translateY(-100%); opacity: 0; }
+    100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+}
+
+/* FEATURE 32: ANIMAÇÃO DE TEXTO SALTITANTE NO H1 */
+.char-bounce {
+    display: inline-block;
+    animation: charBounce 1s ease-in-out infinite;
+}
+@keyframes charBounce {
+    0%,60%,80%,100% { transform: translateY(0); }
+    40% { transform: translateY(-8px); }
+}
+
+/* FEATURE 33: NOTA MUSICAL FLUTUANTE DOS ANIMAIS */
+.note-float {
+    position: fixed;
+    font-size: 1.4rem;
+    pointer-events: none;
+    z-index: 30;
+    animation: noteRise 1.5s ease forwards;
+}
+@keyframes noteRise {
+    0%   { transform: translateY(0) scale(1); opacity: 1; }
+    100% { transform: translateY(-80px) scale(0.5); opacity: 0; }
+}
+
+/* FEATURE 34: BALÃO DE AR QUENTE CLICÁVEL */
+#balloon { cursor: pointer; pointer-events: all; transition: filter 0.2s; }
+#balloon:hover { filter: drop-shadow(0 0 15px rgba(255,100,100,0.8)); }
+
+/* FEATURE 35: EFEITO PARALLAX NAS NUVENS AO MOVER MOUSE */
+/* Controlado via JS, sem CSS necessário */
+
+/* FEATURE 36: INDICADOR DE PRESENÇA */
+.confirmed-banner {
+    display: none;
+    position: fixed;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background: linear-gradient(135deg, #4caf50, #1b5e20);
+    border-radius: 20px;
+    padding: 30px 50px;
+    text-align: center;
+    z-index: 999;
+    box-shadow: 0 10px 50px rgba(0,0,0,0.6);
+    border: 3px solid rgba(255,255,255,0.4);
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.5s;
+    opacity: 0;
+}
+.confirmed-banner.show {
+    display: block;
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+}
+.confirmed-banner h2 {
+    font-family: 'Luckiest Guy', cursive;
+    color: var(--sun);
+    font-size: 2rem;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+    margin-bottom: 8px;
+}
+.confirmed-banner p { color: white; font-size: 1.1rem; font-weight: 600; }
+
+/* FEATURE 37: BRILHO NAS INFORMAÇÕES */
+.info-card .info-icon { animation: iconWiggle 3s ease-in-out infinite; }
+@keyframes iconWiggle{0%,80%,100%{transform:rotate(0deg)}90%{transform:rotate(8deg)}95%{transform:rotate(-8deg)}}
+
+/* FEATURE 38: ANIMAÇÃO DO TELHADO DO CELEIRO */
+@keyframes roofGlow {
+    0%,100% { filter: drop-shadow(0 -4px 8px rgba(0,0,0,0.2)); }
+    50%      { filter: drop-shadow(0 -4px 20px rgba(255,100,0,0.4)); }
+}
+.barn-roof { animation: roofGlow 3s ease-in-out infinite; }
+
+/* FEATURE 39: CÉU GRADIENTE ANIMADO */
+@keyframes skyShift {
+    0%,100% { background: linear-gradient(180deg, #4fc3f7 0%, #81d4fa 55%, #b8e4f0 100%); }
+    50%      { background: linear-gradient(180deg, #29b6f6 0%, #4fc3f7 55%, #81d4fa 100%); }
+}
+body { animation: skyShift 20s ease-in-out infinite; }
+body.night-mode { animation: none !important; }
+
+/* FEATURE 40: BADGE DA LAURA NO CONVITE */
+.laura-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: linear-gradient(135deg, #f48fb1, #e91e8c);
+    color: white; border-radius: 30px;
+    padding: 5px 16px;
+    font-weight: 700; font-size: 0.9rem;
+    box-shadow: 0 3px 10px rgba(233,30,140,0.4);
+    margin-bottom: 8px;
+    white-space: nowrap;
+}
+
+/* ============================================================
+   LISTA DE PRESENTES
+   ============================================================ */
+.gift-section {
+    margin-top: 22px;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.3);
+    background: rgba(0,0,0,0.12);
+}
+
+.gift-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 18px;
+    background: linear-gradient(90deg, #f44336, #e91e63);
+    cursor: pointer;
+    user-select: none;
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1.2rem;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.4);
+    letter-spacing: 1px;
+    transition: background 0.2s;
+}
+.gift-header:hover { background: linear-gradient(90deg, #d32f2f, #c2185b); }
+.gift-header-icon { font-size: 1.6rem; animation: giftBounce 1.2s ease-in-out infinite; }
+@keyframes giftBounce { 0%,100%{transform:rotate(-5deg) scale(1)} 50%{transform:rotate(5deg) scale(1.15)} }
+.gift-arrow {
+    margin-left: auto;
+    font-size: 1rem;
+    transition: transform 0.35s;
+}
+.gift-arrow.open { transform: rotate(180deg); }
+
+.gift-list {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s;
+    padding: 0 16px;
+    background: rgba(0,0,0,0.08);
+}
+.gift-list.open {
+    max-height: 1200px;
+    padding: 14px 16px 18px;
+}
+
+.gift-intro {
+    font-size: 0.95rem;
+    color: var(--wood-light);
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 14px;
+    line-height: 1.5;
+}
+
+.gift-category {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 0.9rem;
+    color: var(--sun);
+    letter-spacing: 1px;
+    margin: 14px 0 8px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(255,255,255,0.2);
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.4);
+}
+
+.gift-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 7px;
+    transition: background 0.2s, transform 0.2s;
+    cursor: default;
+    text-align: left;
+}
+.gift-item:hover {
+    background: rgba(255,255,255,0.2);
+    transform: translateX(4px);
+}
+.gift-emoji { font-size: 1.8rem; flex-shrink: 0; }
+.gift-info { display: flex; flex-direction: column; }
+.gift-info strong {
+    color: white;
+    font-size: 0.95rem;
+    font-weight: 800;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+.gift-info span {
+    color: var(--wood-light);
+    font-size: 0.82rem;
+    font-weight: 600;
+}
+.gift-info span b { color: var(--sun); }
+
+/* Items clicáveis (links) */
+.gift-link {
+    text-decoration: none;
+    cursor: pointer;
+}
+.gift-link:hover {
+    background: rgba(255,255,255,0.25);
+    transform: translateX(4px);
+    border-color: rgba(255,255,255,0.5);
+}
+.gift-ext {
+    margin-left: auto;
+    flex-shrink: 0;
+    font-size: 1rem;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+.gift-link:hover .gift-ext { opacity: 1; }
+
+.gift-price {
+    color: #ffd600;
+    font-size: 0.78rem;
+    font-weight: 700;
+    margin-top: 2px;
+}
+.gift-price small {
+    color: rgba(255,214,0,0.7);
+    font-weight: 500;
+}
+.gift-shein {
+    background: linear-gradient(90deg, #ff6b6b, #feca57);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 800;
+    font-size: 0.78rem;
+}
+
+
+/* PIX BOX */
+.pix-box {
+    margin-top: 18px;
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    border: 2px solid #25D366;
+    border-radius: 16px;
+    padding: 16px 18px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.25);
+}
+.pix-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(37,211,102,0.4);
+}
+.pix-logo {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1.5rem;
+    color: #25D366;
+    text-align: center;
+    margin-bottom: 12px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 15px rgba(37,211,102,0.5);
+}
+.pix-details {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+.pix-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 6px 10px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 8px;
+    border: 1px solid rgba(37,211,102,0.2);
+}
+.pix-row span {
+    color: #aaa;
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    flex-shrink: 0;
+}
+.pix-row strong {
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 800;
+    text-align: right;
+}
+#pixKey {
+    color: #25D366;
+    font-size: 1rem;
+    letter-spacing: 1px;
+}
+.pix-copy-hint {
+    text-align: center;
+    color: rgba(37,211,102,0.8);
+    font-size: 0.8rem;
+    font-weight: 600;
+    transition: color 0.3s;
+    animation: pixPulse 2s ease-in-out infinite;
+}
+@keyframes pixPulse {
+    0%,100% { color: rgba(37,211,102,0.7); }
+    50%      { color: rgba(37,211,102,1); }
+}
+.pix-copied {
+    color: #ffd600 !important;
+    animation: none !important;
+}
+
+/* ============================================================
+   RESPONSIVE TWEAKS
+   ============================================================ */
+@media (max-width: 420px) {
+    .scroll-content { padding: 20px 18px 28px; }
+    h1 { font-size: 1.6rem; }
+    h1 span { font-size: 2rem; }
+    .info-card { padding: 10px 12px; gap: 10px; }
+    .countdown-box { padding: 6px 10px; }
+    .cd-unit { min-width: 32px; padding: 3px 5px; }
+    .cd-unit span { font-size: 1rem; }
+    .scarecrow { right: 20px; }
+    .windmill { display: none; }
+    .float-btns { bottom: 90px; }
+    .gift-item { padding: 8px 10px; gap: 8px; }
+    .pix-row strong { font-size: 0.8rem; }
+}
+
+/* ============================================================
+   MINI GAMES SECTION (dentro do barn)
+   ============================================================ */
+.mini-games-section {
+    margin-top: 22px;
+    padding: 16px;
+    background: rgba(0,0,0,0.15);
+    border-radius: 16px;
+    border: 2px solid rgba(255,255,255,0.2);
+}
+.mg-title {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1rem;
+    color: var(--sun);
+    text-align: center;
+    margin-bottom: 14px;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+.mg-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+.mg-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.12);
+    border: 2px solid rgba(255,255,255,0.25);
+    border-radius: 14px;
+    padding: 14px 10px;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+    color: white;
+    font-family: 'Baloo 2', cursive;
+    position: relative;
+    overflow: hidden;
+}
+.mg-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+    border-radius: inherit;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.mg-btn:hover { transform: translateY(-4px) scale(1.04); background: rgba(255,255,255,0.22); border-color: rgba(255,255,255,0.5); box-shadow: 0 8px 24px rgba(0,0,0,0.3); }
+.mg-btn:hover::before { opacity: 1; }
+.mg-btn:active { transform: scale(0.97); }
+.mg-icon { font-size: 2.2rem; line-height: 1; animation: mgIconWiggle 2.5s ease-in-out infinite; }
+@keyframes mgIconWiggle { 0%,100%{transform:rotate(-4deg)} 50%{transform:rotate(4deg)} }
+.mg-label { font-size: 0.78rem; font-weight: 700; text-align: center; line-height: 1.3; text-shadow: 1px 1px 2px rgba(0,0,0,0.4); }
+
+#mgMemory { background: linear-gradient(135deg, rgba(33,150,243,0.3), rgba(63,81,181,0.3)); border-color: rgba(100,180,255,0.4); }
+#mgQuiz   { background: linear-gradient(135deg, rgba(76,175,80,0.3),  rgba(27,94,32,0.3));   border-color: rgba(100,220,100,0.4); }
+#mgCake   { background: linear-gradient(135deg, rgba(233,30,99,0.3),  rgba(156,39,176,0.3)); border-color: rgba(255,100,180,0.4); }
+#mgBook   { background: linear-gradient(135deg, rgba(255,152,0,0.3),  rgba(244,67,54,0.3));  border-color: rgba(255,180,50,0.4); }
+
+/* ============================================================
+   MODAIS — BASE
+   ============================================================ */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.35s;
+}
+.modal-overlay.open {
+    opacity: 1;
+    pointer-events: all;
+}
+.modal-box {
+    background: linear-gradient(160deg, #2d1b0e, #1a0d05);
+    border: 3px solid var(--wood);
+    border-radius: 22px;
+    padding: 24px 20px 20px;
+    max-width: 520px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    position: relative;
+    transform: scale(0.85) translateY(30px);
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    scrollbar-width: thin;
+    scrollbar-color: var(--wood) transparent;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7), inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.modal-overlay.open .modal-box { transform: scale(1) translateY(0); }
+.modal-box::-webkit-scrollbar { width: 5px; }
+.modal-box::-webkit-scrollbar-track { background: transparent; }
+.modal-box::-webkit-scrollbar-thumb { background: var(--wood); border-radius: 10px; }
+
+.modal-close {
+    position: absolute;
+    top: 12px; right: 14px;
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: white;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
+}
+.modal-close:hover { background: rgba(244,67,54,0.6); transform: rotate(90deg) scale(1.1); }
+
+.modal-title {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1.5rem;
+    color: var(--sun);
+    text-align: center;
+    margin-bottom: 16px;
+    text-shadow: 2px 2px 0 rgba(0,0,0,0.4);
+    letter-spacing: 1px;
+    padding-right: 30px;
+}
+
+/* ============================================================
+   JOGO DA MEMÓRIA
+   ============================================================ */
+.memory-stats-bar {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+    background: rgba(0,0,0,0.2);
+    border-radius: 12px;
+    padding: 8px 12px;
+}
+.mem-stat {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--wood-light);
+    text-align: center;
+}
+.mem-stat b { color: var(--sun); font-size: 1rem; }
+
+.memory-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    perspective: 1000px;
+}
+.memory-card {
+    aspect-ratio: 1;
+    cursor: pointer;
+    border-radius: 12px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    user-select: none;
+    -webkit-user-select: none;
+}
+.memory-card.flipped   { transform: rotateY(180deg); }
+.memory-card.matched   { transform: rotateY(180deg); cursor: default; }
+.memory-card.matched .card-back { background: linear-gradient(135deg, #2e7d32, #43a047) !important; box-shadow: 0 0 16px rgba(76,175,80,0.6); }
+.memory-card.shake     { animation: cardShake 0.4s ease; }
+@keyframes cardShake { 0%,100%{transform:rotateY(180deg)} 25%{transform:rotateY(180deg) translateX(-5px)} 75%{transform:rotateY(180deg) translateX(5px)} }
+.card-front, .card-back {
+    position: absolute;
+    inset: 0;
+    border-radius: 12px;
+    backface-visibility: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+}
+.card-front {
+    background: linear-gradient(135deg, #8b4513, #a0522d);
+    border: 2px solid var(--wood);
+    color: var(--wood-light);
+    font-size: 1.8rem;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+.card-front::after {
+    content: '🌻';
+    position: absolute;
+    font-size: 1.6rem;
+    opacity: 0.25;
+}
+.card-back {
+    background: linear-gradient(135deg, #1565c0, #283593);
+    border: 2px solid rgba(100,181,246,0.5);
+    transform: rotateY(180deg);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+}
+.memory-win-box {
+    margin-top: 16px;
+    text-align: center;
+    padding: 18px;
+    background: linear-gradient(135deg, rgba(76,175,80,0.2), rgba(27,94,32,0.3));
+    border: 2px solid rgba(76,175,80,0.4);
+    border-radius: 16px;
+    animation: winPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes winPop { from{transform:scale(0) rotate(-10deg);opacity:0} to{transform:scale(1) rotate(0);opacity:1} }
+.mem-win-text { font-family: 'Luckiest Guy', cursive; font-size: 1.3rem; color: var(--sun); margin-bottom: 8px; }
+.mem-win-score { color: var(--wood-light); font-size: 0.9rem; margin-bottom: 14px; }
+.mem-win-score b { color: white; }
+.mem-play-again {
+    background: linear-gradient(135deg, #f44336, #e91e63);
+    color: white; border: none;
+    padding: 10px 24px; border-radius: 25px;
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1rem; cursor: pointer;
+    transition: transform 0.2s;
+    letter-spacing: 1px;
+}
+.mem-play-again:hover { transform: scale(1.06); }
+
+/* ============================================================
+   QUIZ DA FAZENDA
+   ============================================================ */
+.quiz-progress-wrap {
+    height: 8px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 8px;
+    margin-bottom: 18px;
+    overflow: hidden;
+    position: relative;
+}
+.quiz-prog-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ffd600, #ff6b35);
+    border-radius: 8px;
+    transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.quiz-prog-label {
+    position: absolute;
+    right: 8px; top: -22px;
+    font-size: 0.75rem;
+    color: var(--wood-light);
+    font-weight: 700;
+}
+.quiz-content-area { min-height: 280px; }
+.quiz-question-box {
+    background: rgba(0,0,0,0.2);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 16px;
+}
+.quiz-question-num {
+    font-size: 0.75rem;
+    color: var(--sun);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+}
+.quiz-question-text {
+    font-size: 1.05rem;
+    color: white;
+    font-weight: 700;
+    line-height: 1.4;
+}
+.quiz-question-emoji {
+    font-size: 2.5rem;
+    display: block;
+    text-align: center;
+    margin: 8px 0;
+}
+.quiz-options { display: flex; flex-direction: column; gap: 8px; }
+.quiz-option {
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 12px 16px;
+    cursor: pointer;
+    color: white;
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: left;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 10px;
+}
+.quiz-option:hover { background: rgba(255,255,255,0.18); border-color: rgba(255,255,255,0.5); transform: translateX(4px); }
+.quiz-option.correct { background: rgba(76,175,80,0.35); border-color: #4caf50; color: #a5d6a7; pointer-events: none; }
+.quiz-option.wrong   { background: rgba(244,67,54,0.3);  border-color: #f44336; color: #ef9a9a;  pointer-events: none; }
+.quiz-option.disabled { pointer-events: none; opacity: 0.6; }
+.quiz-option-letter {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem; font-weight: 800;
+    flex-shrink: 0;
+}
+.quiz-feedback {
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    animation: feedbackSlide 0.3s ease;
+}
+@keyframes feedbackSlide { from{transform:translateY(8px);opacity:0} to{transform:translateY(0);opacity:1} }
+.quiz-feedback.correct { background: rgba(76,175,80,0.25); color: #a5d6a7; border: 1px solid rgba(76,175,80,0.4); }
+.quiz-feedback.wrong   { background: rgba(244,67,54,0.2);  color: #ef9a9a;  border: 1px solid rgba(244,67,54,0.4); }
+.quiz-next-btn {
+    width: 100%; margin-top: 12px;
+    background: linear-gradient(135deg, var(--wood), var(--wood-dark));
+    border: none; color: white;
+    padding: 12px; border-radius: 14px;
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1rem; cursor: pointer;
+    letter-spacing: 1px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+}
+.quiz-next-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0,0,0,0.3); }
+.quiz-score-box {
+    text-align: center;
+    padding: 24px 16px;
+    animation: winPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.quiz-score-icon { font-size: 4rem; margin-bottom: 12px; animation: scoreBounce 0.8s cubic-bezier(0.34,1.56,0.64,1); }
+@keyframes scoreBounce { from{transform:scale(0) rotate(-20deg)} to{transform:scale(1) rotate(0)} }
+.quiz-score-msg { font-size: 1.2rem; color: white; font-weight: 800; margin-bottom: 8px; }
+.quiz-score-pts { color: var(--wood-light); margin-bottom: 18px; }
+.quiz-score-pts b { color: var(--sun); font-size: 1.2rem; }
+.quiz-restart {
+    background: linear-gradient(135deg, #f44336, #e91e63);
+    color: white; border: none;
+    padding: 12px 28px; border-radius: 25px;
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1rem; cursor: pointer;
+    transition: transform 0.2s;
+    letter-spacing: 1px;
+}
+.quiz-restart:hover { transform: scale(1.06); }
+
+/* ============================================================
+   BOLO INTERATIVO
+   ============================================================ */
+.cake-modal-box { max-width: 420px; text-align: center; }
+.cake-subtitle {
+    font-size: 0.9rem;
+    color: var(--wood-light);
+    margin-bottom: 16px;
+    font-weight: 600;
+}
+.cake-wrapper {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.cake-candles-row {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    margin-bottom: 4px;
+    flex-wrap: wrap;
+    max-width: 280px;
+}
+.candle {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    transition: transform 0.2s;
+    position: relative;
+}
+.candle:hover { transform: scale(1.2); }
+.candle-flame {
+    width: 12px; height: 18px;
+    background: radial-gradient(ellipse at center, #fff9c4 0%, #ffd54f 40%, #ff6d00 80%, transparent 100%);
+    border-radius: 50% 50% 40% 40%;
+    animation: flameFlicker 0.3s ease-in-out infinite alternate;
+    filter: drop-shadow(0 0 6px rgba(255,150,50,0.8));
+    transition: all 0.3s;
+}
+@keyframes flameFlicker {
+    0%   { transform: scaleX(1)   scaleY(1)    rotate(-2deg); }
+    33%  { transform: scaleX(0.9) scaleY(1.08) rotate(2deg); }
+    66%  { transform: scaleX(1.1) scaleY(0.95) rotate(-1deg); }
+    100% { transform: scaleX(0.95) scaleY(1.05) rotate(1deg); }
+}
+.candle-flame.out {
+    background: none;
+    filter: none;
+    animation: none;
+    height: 4px; width: 4px;
+    background: rgba(100,100,100,0.4);
+    border-radius: 50%;
+}
+.candle-body {
+    width: 10px; height: 30px;
+    border-radius: 4px 4px 2px 2px;
+    position: relative;
+}
+.candle-drip {
+    position: absolute;
+    top: -2px; left: 1px;
+    width: 3px; height: 6px;
+    border-radius: 3px;
+    opacity: 0.6;
+}
+.cake-layer {
+    width: 220px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+.cake-l1 {
+    height: 55px;
+    background: linear-gradient(180deg, #f06292, #e91e63);
+    border: 3px solid #f8bbd0;
+    flex-direction: column;
+    font-size: 0.9rem;
+    border-radius: 12px 12px 6px 6px;
+}
+.cake-l2 {
+    height: 50px;
+    background: linear-gradient(180deg, #ffd54f, #ff8f00);
+    border: 3px solid #ffe082;
+    font-size: 1.3rem;
+    letter-spacing: 2px;
+    width: 250px;
+}
+.cake-l3 {
+    height: 60px;
+    background: linear-gradient(180deg, #a5d6a7, #2e7d32);
+    border: 3px solid #c8e6c9;
+    width: 280px;
+}
+.cake-top-deco {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1rem;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    letter-spacing: 1px;
+}
+.cake-frosting-drips {
+    position: absolute;
+    bottom: -4px; left: 0; right: 0;
+    height: 8px;
+    background: repeating-linear-gradient(90deg, transparent 0 10px, rgba(255,255,255,0.35) 10px 14px);
+    border-radius: 0 0 8px 8px;
+}
+.cake-base-deco {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1rem;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    letter-spacing: 2px;
+}
+.cake-plate {
+    width: 300px; height: 18px;
+    background: linear-gradient(180deg, #eceff1, #bdbdbd);
+    border-radius: 50%;
+    box-shadow: 0 6px 14px rgba(0,0,0,0.4);
+    margin-top: -2px;
+}
+.cake-msg-box {
+    margin-top: 16px;
+    padding: 14px;
+    background: rgba(255,214,0,0.15);
+    border: 2px solid rgba(255,214,0,0.4);
+    border-radius: 14px;
+    animation: winPop 0.4s ease;
+}
+.cake-msg-text {
+    font-size: 1rem;
+    color: var(--sun);
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.5;
+}
+.cake-candles-left {
+    margin-top: 12px;
+    font-size: 0.85rem;
+    color: var(--wood-light);
+    font-weight: 600;
+    text-align: center;
+}
+
+/* ============================================================
+   LIVRO DE VISITAS
+   ============================================================ */
+.guest-modal-box { max-width: 480px; }
+.guest-form-area { margin-bottom: 16px; }
+.guest-input {
+    width: 100%;
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 10px 14px;
+    color: white;
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+    outline: none;
+}
+.guest-input::placeholder { color: rgba(255,255,255,0.4); }
+.guest-input:focus { border-color: var(--sun); }
+.guest-textarea {
+    width: 100%;
+    background: rgba(255,255,255,0.08);
+    border: 2px solid rgba(255,255,255,0.2);
+    border-radius: 12px;
+    padding: 10px 14px;
+    color: white;
+    font-family: 'Baloo 2', cursive;
+    font-size: 0.9rem;
+    font-weight: 600;
+    resize: none;
+    margin-bottom: 10px;
+    transition: border-color 0.2s;
+    outline: none;
+}
+.guest-textarea::placeholder { color: rgba(255,255,255,0.4); }
+.guest-textarea:focus { border-color: var(--sun); }
+.guest-emoji-picker {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+}
+.guest-emoji-picker span {
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: transform 0.15s;
+    padding: 2px;
+    border-radius: 6px;
+}
+.guest-emoji-picker span:hover { transform: scale(1.35); background: rgba(255,255,255,0.1); }
+.guest-submit-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #e91e63, #f44336);
+    border: none;
+    color: white;
+    padding: 12px;
+    border-radius: 14px;
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1.05rem;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.3);
+}
+.guest-submit-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 0 rgba(0,0,0,0.3); }
+.guest-msgs-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+.guest-msgs-list::-webkit-scrollbar { width: 4px; }
+.guest-msgs-list::-webkit-scrollbar-thumb { background: var(--wood); border-radius: 4px; }
+.guest-msg-card {
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 14px;
+    padding: 12px 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    animation: msgSlideIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes msgSlideIn { from{transform:translateX(30px);opacity:0} to{transform:translateX(0);opacity:1} }
+.guest-msg-avatar {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--wood), var(--wood-dark));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    border: 2px solid rgba(255,255,255,0.2);
+}
+.guest-msg-body { flex: 1; }
+.guest-msg-name {
+    font-weight: 800;
+    color: var(--sun);
+    font-size: 0.9rem;
+    margin-bottom: 3px;
+}
+.guest-msg-text {
+    font-size: 0.88rem;
+    color: var(--wood-light);
+    line-height: 1.5;
+    word-break: break-word;
+}
+.guest-msg-time {
+    font-size: 0.72rem;
+    color: rgba(255,255,255,0.35);
+    margin-top: 5px;
+}
+.guest-empty-msg {
+    text-align: center;
+    color: rgba(255,255,255,0.35);
+    font-size: 0.9rem;
+    padding: 20px;
+}
+
+/* ============================================================
+   SISTEMA DE CONQUISTAS (ACHIEVEMENTS)
+   ============================================================ */
+.achievement-popup {
+    position: fixed;
+    top: 20px;
+    right: -400px;
+    background: linear-gradient(135deg, #1a0d05, #2d1b0e);
+    border: 2px solid var(--sun);
+    border-radius: 16px;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    z-index: 900;
+    min-width: 280px;
+    max-width: 320px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.6), 0 0 20px rgba(255,214,0,0.2);
+    transition: right 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    pointer-events: none;
+}
+.achievement-popup.show { right: 20px; }
+.ach-left { flex-shrink: 0; }
+.ach-icon {
+    font-size: 2.4rem;
+    animation: achIconSpin 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes achIconSpin { from{transform:scale(0) rotate(-30deg)} to{transform:scale(1) rotate(0)} }
+.ach-right { flex: 1; }
+.ach-label {
+    font-size: 0.68rem;
+    color: var(--sun);
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 2px;
+}
+.ach-title {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1rem;
+    color: white;
+    letter-spacing: 0.5px;
+}
+.ach-desc {
+    font-size: 0.78rem;
+    color: var(--wood-light);
+    font-weight: 600;
+    margin-top: 2px;
+}
+
+/* ============================================================
+   LOADING SCREEN
+   ============================================================ */
+.loading-screen {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(180deg, #1a5276, #0d2d4a);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    transition: opacity 0.8s, pointer-events 0.8s;
+}
+.loading-screen.hidden { opacity: 0; pointer-events: none; }
+.loading-barn {
+    font-size: 6rem;
+    animation: loadingBarnBounce 1s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(255,214,0,0.5));
+}
+@keyframes loadingBarnBounce { 0%,100%{transform:scale(1) translateY(0)} 50%{transform:scale(1.1) translateY(-10px)} }
+.loading-animals {
+    font-size: 2rem;
+    letter-spacing: 8px;
+    animation: animalsMarch 1s linear infinite;
+}
+@keyframes animalsMarch { 0%{letter-spacing:8px} 50%{letter-spacing:12px} 100%{letter-spacing:8px} }
+.loading-text {
+    font-family: 'Luckiest Guy', cursive;
+    font-size: 1.4rem;
+    color: var(--sun);
+    text-align: center;
+    text-shadow: 0 0 20px rgba(255,214,0,0.5);
+    letter-spacing: 1px;
+}
+.loading-bar-wrap {
+    width: 260px; height: 10px;
+    background: rgba(255,255,255,0.15);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.2);
+}
+.loading-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--sun), #ff6b35, var(--sun));
+    background-size: 200% 100%;
+    animation: loadingPulse 1s linear infinite;
+    border-radius: 10px;
+    transition: width 0.3s;
+    width: 0%;
+}
+@keyframes loadingPulse { 0%{background-position:200% 0} 100%{background-position:-200% 0} }
+
+/* ============================================================
+   SCROLLBAR GLOBAL
+   ============================================================ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+::-webkit-scrollbar-thumb { background: var(--wood); border-radius: 10px; }
+
+/* ============================================================
+   RESPONSIVE MODAL
+   ============================================================ */
+@media (max-width: 480px) {
+    .modal-box { padding: 20px 14px 16px; border-radius: 18px; }
+    .modal-title { font-size: 1.2rem; }
+    .memory-grid { grid-template-columns: repeat(4, 1fr); gap: 6px; }
+    .cake-layer { width: 90%; }
+    .cake-l2 { width: 100%; }
+    .cake-l3 { width: 100%; }
+    .cake-plate { width: 100%; }
+    .achievement-popup { min-width: 240px; max-width: 280px; }
+    .achievement-popup.show { right: 12px; top: 12px; }
+    .mg-grid { grid-template-columns: 1fr 1fr; }
+    .mg-btn { padding: 10px 6px; }
+    .mg-icon { font-size: 1.8rem; }
+}
+
+/* ============================================================
+   SKELETON LOADER (livro de visitas)
+   ============================================================ */
+.guest-loading {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px 0;
+}
+.guest-skeleton {
+    height: 14px;
+    background: linear-gradient(90deg,
+        rgba(255,255,255,0.06) 0%,
+        rgba(255,255,255,0.15) 40%,
+        rgba(255,255,255,0.06) 80%
+    );
+    background-size: 200% 100%;
+    animation: skelPulse 1.2s linear infinite;
+    border-radius: 8px;
+    width: 100%;
+}
+@keyframes skelPulse {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ============================================================
+   MOBILE — PACOTE COMPLETO DE MELHORIAS
+   ============================================================ */
+
+/* 1. Remove highlight azul ao tocar em elementos no celular */
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+/* 2. Inputs não fazem zoom no iOS (font-size mínimo 16px) */
+input, textarea, select {
+    font-size: 16px !important;
+}
+
+/* 3. Botões têm tamanho mínimo de toque (padrão Apple: 44px) */
+button,
+.mg-btn,
+.quiz-option,
+.memory-card,
+.candle,
+.gift-link,
+.pix-box {
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* 4. Modal com scroll suave no iOS */
+.modal-overlay {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+.modal-box {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+}
+.guest-msgs-list {
+    -webkit-overflow-scrolling: touch;
+}
+.scroll-content {
+    -webkit-overflow-scrolling: touch;
+}
+
+/* 5. Memory cards maiores no celular (melhor toque) */
+@media (max-width: 480px) {
+    .memory-grid {
+        grid-template-columns: repeat(4, 1fr);
+        gap: 5px;
+    }
+    .card-front, .card-back { font-size: 1.4rem; border-radius: 8px; }
+    .memory-card { border-radius: 8px; }
+
+    /* Modal ocupa quase a tela toda */
+    .modal-overlay {
+        padding: 8px;
+        align-items: flex-end;  /* sobe do rodapé como bottom sheet */
+    }
+    .modal-box {
+        max-height: 94vh;
+        border-radius: 22px 22px 12px 12px;
+        padding: 20px 14px 30px;
+    }
+
+    /* Velas do bolo maiores para tocar melhor */
+    .candle { transform-origin: bottom center; }
+    .candle-flame { width: 14px; height: 22px; }
+    .candle-body  { width: 12px; height: 35px; }
+    .cake-l1 { width: 95%; }
+    .cake-l2 { width: 100%; }
+    .cake-l3 { width: 100%; }
+    .cake-plate { width: 100%; }
+
+    /* Quiz opções maiores para toque */
+    .quiz-option { padding: 14px 12px; font-size: 0.9rem; }
+    .quiz-option-letter { width: 32px; height: 32px; }
+
+    /* Livro de visitas mais largo */
+    .guest-emoji-picker span { font-size: 1.6rem; padding: 4px; }
+
+    /* Achievement ocupa posição segura */
+    .achievement-popup { max-width: calc(100vw - 24px); min-width: 220px; }
+    .achievement-popup.show { right: 12px; top: 70px; }
+
+    /* Botões flutuantes maiores no mobile */
+    .float-btns button { width: 52px; height: 52px; font-size: 1.4rem; }
+    .float-btns { right: 10px; gap: 8px; }
+}
+
+/* 6. Landscape mobile — reduz alturas */
+@media (max-height: 500px) and (orientation: landscape) {
+    .modal-overlay { align-items: center; }
+    .modal-box     { max-height: 95vh; }
+    .cake-wrapper  { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 4px; }
+    .cake-candles-row { order: -1; width: 100%; max-width: none; }
+    .cake-l1, .cake-l2, .cake-l3, .cake-plate { width: 140px; }
+    .memory-grid   { grid-template-columns: repeat(8, 1fr); gap: 4px; }
+    .loading-barn  { font-size: 3.5rem; }
+}
+
+/* 7. Previne que textos selecionáveis atrapalhem jogos */
+.memory-card, .quiz-option, .mg-btn, .candle {
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* 8. Garantir que toda a barra de rolagem do barn funcione no iOS */
+.barn-content {
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
+}
+
+/* 9. Floating buttons não ficam atrás da barra segura no iPhone X+ */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+    .float-btns {
+        bottom: calc(110px + env(safe-area-inset-bottom));
+    }
+    .piano-panel {
+        padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    }
+}
+
+/* 10. Toast centralizado no mobile */
+@media (max-width: 480px) {
+    .toast {
+        font-size: 0.88rem;
+        max-width: calc(100vw - 32px);
+        text-align: center;
+        white-space: normal;
+        line-height: 1.4;
+    }
+}
+

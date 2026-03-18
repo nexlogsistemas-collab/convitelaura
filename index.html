@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🐄 Fazendinha da Laura | Venha Festejar! 🐄</title>
+    <meta name="description" content="Convite para os 7 anos da Laura — Fazendinha temática com muita alegria!">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Baloo+2:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* cursor cowboy */
+        body { cursor: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='32' height='32'><text y='28' font-size='28'>🤠</text></svg>") 16 16, auto; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- YouTube IFrame API para música do Sítio do Pica-Pau -->
+    <script src="https://www.youtube.com/iframe_api"></script>
+</head>
+<body>
+
+<!-- ============ SCENE BACKGROUND ============ -->
+<div class="scene">
+    <!-- Sol + Lua -->
+    <div class="sun" id="sun">
+        <div class="sun-ray"></div><div class="sun-ray"></div><div class="sun-ray"></div>
+        <div class="sun-ray"></div><div class="sun-ray"></div><div class="sun-ray"></div>
+        <div class="sun-ray"></div><div class="sun-ray"></div>
+    </div>
+    <div class="moon" id="moon">🌕</div>
+    <!-- Estrelas -->
+    <div class="stars-layer" id="starsLayer"></div>
+    <!-- Arco-Iris -->
+    <div class="rainbow" id="rainbow"></div>
+    <!-- Nuvens -->
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+    <!-- Balão de ar quente -->
+    <div class="hot-air-balloon" id="balloon">
+        <div class="balloon-body">🎈</div>
+        <div class="balloon-basket">🧺</div>
+    </div>
+    <!-- Pássaros -->
+    <div class="bird" id="bird1"></div>
+    <div class="bird bird2" id="bird2"></div>
+    <!-- Borboleta -->
+    <div class="butterfly" id="butterfly1">🦋</div>
+    <div class="butterfly butterfly2" id="butterfly2">🦋</div>
+    <!-- Colinas e grama -->
+    <div class="hills"></div>
+    <div class="grass-ground"></div>
+    <!-- Vaga-lumes (ativados à noite) -->
+    <div class="fireflies-layer" id="firefliesLayer"></div>
+</div>
+
+<!-- ============ BANDEIRINHAS ============ -->
+<div class="bunting" id="bunting">
+    <div class="bunting-string"></div>
+    <span class="flag f1">🎉</span><span class="flag f2">⭐</span><span class="flag f3">🌻</span>
+    <span class="flag f4">🎈</span><span class="flag f5">⭐</span><span class="flag f6">🎉</span>
+    <span class="flag f7">🌻</span><span class="flag f8">🎈</span>
+</div>
+
+<!-- ============ COUNTDOWN ============ -->
+<div class="countdown-box" id="countdownBox">
+    <div class="cd-label">⏳ Faltam para a festa</div>
+    <div class="cd-digits">
+        <div class="cd-unit"><span id="cdDays">--</span><small>dias</small></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-unit"><span id="cdHours">--</span><small>hrs</small></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-unit"><span id="cdMins">--</span><small>min</small></div>
+        <div class="cd-sep">:</div>
+        <div class="cd-unit"><span id="cdSecs">--</span><small>seg</small></div>
+    </div>
+</div>
+
+<!-- ============ ANIMALS WALKING ============ -->
+<div class="animals-layer">
+    <!-- Vaca -->
+    <div class="animal cow" id="cow1" style="bottom:88px; animation-duration:16s; animation-delay:0s;">
+        <div class="animal-body cow-body">
+            <div class="cow-spot spot1"></div>
+            <div class="cow-spot spot2"></div>
+            <div class="animal-head cow-head">
+                <div class="eye"></div>
+                <div class="cow-nose"></div>
+                <div class="cow-ear ear-left"></div>
+                <div class="cow-ear ear-right"></div>
+                <div class="cow-horn horn-left"></div>
+                <div class="cow-horn horn-right"></div>
+            </div>
+            <div class="cow-tail"></div>
+            <div class="cow-udder"></div>
+            <div class="leg leg1"></div>
+            <div class="leg leg2"></div>
+            <div class="leg leg3"></div>
+            <div class="leg leg4"></div>
+        </div>
+        <div class="speech-bubble cow-sound" id="cowBubble">Muuu!</div>
+    </div>
+
+    <!-- Porquinho -->
+    <div class="animal pig" id="pig1" style="bottom:82px; animation-duration:22s; animation-delay:-8s;">
+        <div class="animal-body pig-body">
+            <div class="animal-head pig-head">
+                <div class="eye"></div>
+                <div class="pig-snout">
+                    <div class="pig-nostril"></div>
+                    <div class="pig-nostril"></div>
+                </div>
+                <div class="pig-ear ear-left"></div>
+                <div class="pig-ear ear-right"></div>
+            </div>
+            <div class="pig-tail"></div>
+            <div class="leg leg1 pig-leg"></div>
+            <div class="leg leg2 pig-leg"></div>
+            <div class="leg leg3 pig-leg"></div>
+            <div class="leg leg4 pig-leg"></div>
+        </div>
+        <div class="speech-bubble pig-sound" id="pigBubble">Oinc!</div>
+    </div>
+
+    <!-- Galinha -->
+    <div class="animal chicken" id="chicken1" style="bottom:86px; animation-duration:12s; animation-delay:-4s;">
+        <div class="animal-body chicken-body">
+            <div class="animal-head chicken-head">
+                <div class="eye"></div>
+                <div class="chicken-beak"></div>
+                <div class="chicken-comb"></div>
+                <div class="chicken-wattle"></div>
+            </div>
+            <div class="chicken-tail"></div>
+            <div class="chicken-wing wing-left"></div>
+            <div class="chicken-wing wing-right"></div>
+            <div class="chicken-leg leg-a"></div>
+            <div class="chicken-leg leg-b"></div>
+        </div>
+        <div class="speech-bubble chicken-sound" id="chickenBubble">Cocó!</div>
+    </div>
+
+    <!-- Ovelha -->
+    <div class="animal sheep" id="sheep1" style="bottom:84px; animation-duration:25s; animation-delay:-14s;">
+        <div class="animal-body sheep-body">
+            <div class="sheep-wool wool1"></div>
+            <div class="sheep-wool wool2"></div>
+            <div class="sheep-wool wool3"></div>
+            <div class="animal-head sheep-head">
+                <div class="eye"></div>
+                <div class="sheep-ear ear-left"></div>
+                <div class="sheep-ear ear-right"></div>
+                <div class="sheep-nose"></div>
+            </div>
+            <div class="leg leg1 sheep-leg"></div>
+            <div class="leg leg2 sheep-leg"></div>
+            <div class="leg leg3 sheep-leg"></div>
+            <div class="leg leg4 sheep-leg"></div>
+        </div>
+        <div class="speech-bubble sheep-sound" id="sheepBubble">Béé!</div>
+    </div>
+</div>
+
+<!-- ============ EXTRAS NA CENA ============ -->
+<!-- Trator animado -->
+<div class="tractor" id="tractor">
+    <div class="tractor-body">
+        <div class="tractor-cab">🚜</div>
+    </div>
+    <div class="tractor-smoke" id="tractorSmoke"></div>
+</div>
+
+<!-- Girassóis interativos (clique no chão) -->
+<div class="sunflowers-ground" id="sunflowersGround"></div>
+
+<!-- Espantalho -->
+<div class="scarecrow" id="scarecrow">
+    <div class="sc-hat">🎩</div>
+    <div class="sc-head">😶</div>
+    <div class="sc-body">
+        <div class="sc-arm left-arm">👈</div>
+        <div class="sc-arm right-arm">👉</div>
+    </div>
+    <div class="sc-post"></div>
+</div>
+
+<!-- Moinho de Vento -->
+<div class="windmill" id="windmill">
+    <div class="wm-base"></div>
+    <div class="wm-hub"></div>
+    <div class="wm-blades" id="wmBlades">
+        <div class="wm-blade b1"></div>
+        <div class="wm-blade b2"></div>
+        <div class="wm-blade b3"></div>
+        <div class="wm-blade b4"></div>
+    </div>
+</div>
+
+<!-- ============ FENCE ============ -->
+<div class="fence-row">
+    <div class="fence-post"></div><div class="fence-rail top-rail"></div>
+    <div class="fence-post"></div><div class="fence-rail top-rail"></div>
+    <div class="fence-post"></div><div class="fence-rail top-rail"></div>
+    <div class="fence-post"></div><div class="fence-rail top-rail"></div>
+    <div class="fence-post"></div><div class="fence-rail top-rail"></div>
+    <div class="fence-post"></div><div class="fence-rail top-rail"></div>
+    <div class="fence-post"></div><div class="fence-rail top-rail"></div>
+    <div class="fence-post"></div>
+</div>
+
+<!-- ============ BARN / INVITE ============ -->
+<div id="barn" class="barn">
+
+    <!-- Roof -->
+    <div class="barn-roof">
+        <div class="barn-roof-triangle"></div>
+        <div class="weather-vane">
+            <div class="wv-arrow">▶</div>
+            <div class="wv-pole"></div>
+            <div class="wv-star">★</div>
+        </div>
+    </div>
+
+    <!-- Doors (closed state) -->
+    <div class="barn-door left">
+        <div class="door-planks"></div>
+        <div class="cross-beam"></div>
+        <div class="cross-beam"></div>
+        <div class="door-handle"></div>
+        <div class="door-label">
+            <span class="knock-ico">👋</span>
+            <p>Toque<br>para abrir!</p>
+        </div>
+    </div>
+    <div class="barn-door right">
+        <div class="door-planks"></div>
+        <div class="cross-beam"></div>
+        <div class="cross-beam"></div>
+        <div class="door-handle right-handle"></div>
+    </div>
+
+    <!-- Inside Content -->
+    <div class="barn-inside">
+        <div class="scroll-content">
+
+            <div class="title-block">
+                <div class="star-burst">⭐</div>
+                <h1>Fazendinha<br><span>da Laura</span></h1>
+                <div class="title-hat">🤠</div>
+            </div>
+
+            <div class="banner-tape">✦ VOCÊ ESTÁ CONVIDADO(A)! ✦</div>
+
+            <div class="info-card">
+                <div class="info-icon">🎂</div>
+                <div class="info-text">
+                    <span class="info-label">A festinha</span>
+                    <strong>7 Aninhos da Laura!</strong>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon">📅</div>
+                <div class="info-text">
+                    <span class="info-label">Quando?</span>
+                    <strong>01 de Abril — 16h30</strong>
+                </div>
+            </div>
+
+            <div class="info-card">
+                <div class="info-icon">📍</div>
+                <div class="info-text">
+                    <span class="info-label">Onde?</span>
+                    <strong>Rua Campo Verde, nº 35 — Lagoinha</strong>
+                </div>
+            </div>
+
+            <p class="invite-phrase">
+                As porteiras vão se abrir para<br>uma festa <em>inesquecível!</em> 🎉
+            </p>
+
+            <div class="animals-row">🐄 🐖 🐑 🐓 🌻 🐄 🐖 🐑 🐓</div>
+
+            <button id="confirmBtn" onclick="event.stopPropagation()">
+                <span>🤝 Confirmar Presença!</span>
+            </button>
+
+            <!-- ===== MINI GAMES ===== -->
+            <div class="mini-games-section">
+                <div class="mg-title">🎮 Brincadeiras da Fazendinha</div>
+                <div class="mg-grid">
+                    <button class="mg-btn" id="mgMemory" onclick="openMemoryGame();event.stopPropagation()">
+                        <span class="mg-icon">🃏</span>
+                        <span class="mg-label">Jogo da<br>Memória</span>
+                    </button>
+                    <button class="mg-btn" id="mgQuiz" onclick="openQuiz();event.stopPropagation()">
+                        <span class="mg-icon">🌾</span>
+                        <span class="mg-label">Quiz da<br>Fazenda</span>
+                    </button>
+                    <button class="mg-btn" id="mgCake" onclick="openCake();event.stopPropagation()">
+                        <span class="mg-icon">🎂</span>
+                        <span class="mg-label">Bolo da<br>Laura</span>
+                    </button>
+                    <button class="mg-btn" id="mgBook" onclick="openGuestBook();event.stopPropagation()">
+                        <span class="mg-icon">📖</span>
+                        <span class="mg-label">Livro de<br>Visitas</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ===== LISTA DE PRESENTES ===== -->
+            <div class="gift-section" id="giftSection">
+                <div class="gift-header" onclick="toggleGifts()" id="giftToggle">
+                    <span class="gift-header-icon">🎁</span>
+                    <span>Lista de Presentes</span>
+                    <span class="gift-arrow" id="giftArrow">▼</span>
+                </div>
+
+                <div class="gift-list" id="giftList">
+                    <p class="gift-intro">
+                        Com muito carinho, separamos algumas ideias de presentinhos para a Laura! 🎁💕<br>
+                        <small style="opacity:0.8">✨ São apenas sugestões, fica à vontade! O mais importante é a sua presença! 🤗</small>
+                    </p>
+
+                    <div class="gift-category">🍳 Brinquedos de Cozinha</div>
+
+                    <a class="gift-item gift-link" href="https://br.shp.ee/uyw6ocWg" target="_blank" rel="noopener">
+                        <span class="gift-emoji">🍽️</span>
+                        <div class="gift-info">
+                            <strong>Cozinha Infantil Master Magic Completa</strong>
+                            <span>Geladeira, forno e sai água de verdade!</span>
+                            <span class="gift-price">R$272,63 <small>na Shopee (-18%)</small></span>
+                        </div>
+                        <span class="gift-ext">🔗</span>
+                    </a>
+
+                    <a class="gift-item gift-link" href="https://br.shp.ee/m9HUT1Sk" target="_blank" rel="noopener">
+                        <span class="gift-emoji">☕</span>
+                        <div class="gift-info">
+                            <strong>Kit Eletrodomésticos Infantis</strong>
+                            <span>Cafeteira, liquidificador, air fryer, batedeira</span>
+                            <span class="gift-price">R$38,90 <small>na Shopee (-5%)</small></span>
+                        </div>
+                        <span class="gift-ext">🔗</span>
+                    </a>
+
+                    <a class="gift-item gift-link" href="https://br.shp.ee/Q8yxARW9" target="_blank" rel="noopener">
+                        <span class="gift-emoji">🥦</span>
+                        <div class="gift-info">
+                            <strong>Kit Frutinhas e Legumes de Brinquedo (Velcro)</strong>
+                            <span>Interativo, ótimo para brincar de cozinha</span>
+                            <span class="gift-price">R$29,99 <small>na Shopee (-66%)</small></span>
+                        </div>
+                        <span class="gift-ext">🔗</span>
+                    </a>
+
+                    <div class="gift-category">🎮 Brinquedos & Arte</div>
+
+                    <a class="gift-item gift-link" href="https://br.shp.ee/WZoK9beY" target="_blank" rel="noopener">
+                        <span class="gift-emoji">🧲</span>
+                        <div class="gift-info">
+                            <strong>Blocos de Montar Magnéticos Educativos</strong>
+                            <span>Construção com imãs — criativo e divertido!</span>
+                            <span class="gift-price">R$100,70 <small>na Shopee</small></span>
+                        </div>
+                        <span class="gift-ext">🔗</span>
+                    </a>
+
+                    <a class="gift-item gift-link" href="https://br.shp.ee/nKx2wAv6" target="_blank" rel="noopener">
+                        <span class="gift-emoji">🏰</span>
+                        <div class="gift-info">
+                            <strong>Casinha de Boneca — 4 Andares</strong>
+                            <span>Cozinha, sala, quarto — Castelo Princesinha!</span>
+                            <span class="gift-price">R$65,83 <small>na Shopee (-37%)</small></span>
+                        </div>
+                        <span class="gift-ext">🔗</span>
+                    </a>
+
+                    <a class="gift-item gift-link" href="https://br.shp.ee/XFcJBDRp" target="_blank" rel="noopener">
+                        <span class="gift-emoji">🎨</span>
+                        <div class="gift-info">
+                            <strong>Canetas Marcadoras Artísticas (até 100 cores)</strong>
+                            <span>Cabeça dupla, para desenho e arte</span>
+                            <span class="gift-price">de R$10,99 <small>na Shopee (-84%)</small></span>
+                        </div>
+                        <span class="gift-ext">🔗</span>
+                    </a>
+
+                    <div class="gift-category">💄 Beleza & Acessórios</div>
+
+                    <a class="gift-item gift-link" href="https://br.shp.ee/t3NwLxr9" target="_blank" rel="noopener">
+                        <span class="gift-emoji">💅</span>
+                        <div class="gift-info">
+                            <strong>Kit de Maquiagem Infantil — 30 Peças</strong>
+                            <span>Cosméticos laváveis, conjunto de princesa</span>
+                            <span class="gift-price">R$73,34 <small>na Shopee (-61%)</small></span>
+                        </div>
+                        <span class="gift-ext">🔗</span>
+                    </a>
+
+                    <a class="gift-item gift-link" href="https://br.shp.ee/EMbteYXU" target="_blank" rel="noopener">
+                        <span class="gift-emoji">👜</span>
+                        <div class="gift-info">
+                            <strong>Bolsa Infantil Transversal com Laço</strong>
+                            <span>Bolsinha de menina estilo blogueirinha</span>
+                            <span class="gift-price">R$29,90 <small>na Shopee (-69%)</small></span>
+                        </div>
+                        <span class="gift-ext">🔗</span>
+                    </a>
+
+                    <a class="gift-item gift-link" href="https://api-shein.shein.com/h5/sharejump/appjump?link=laDq0pCiO1L_8_1&localcountry=BR&shc=2_laDq0pCiO1L" target="_blank" rel="noopener">
+                        <span class="gift-emoji">💍</span>
+                        <div class="gift-info">
+                            <strong>Conjunto Colar, Brincos e Pulseira</strong>
+                            <span>Design de Trevo de 5 Folhas — SHEIN</span>
+                            <span class="gift-price gift-shein">SHEIN</span>
+                        </div>
+                        <span class="gift-ext">🔗</span>
+                    </a>
+
+                    <a class="gift-item gift-link" href="https://br.shp.ee/3Cac3J91" target="_blank" rel="noopener">
+                        <span class="gift-emoji">🌸</span>
+                        <div class="gift-info">
+                            <strong>Colônia Granado Bebê Tradicional 100ml</strong>
+                            <span>Suave e delicada, cheiro maravilhoso!</span>
+                            <span class="gift-price">R$79,90 <small>na Shopee</small></span>
+                        </div>
+                        <span class="gift-ext">🔗</span>
+                    </a>
+
+                    <div class="gift-category">👗 Roupas & Calçados</div>
+
+                    <a class="gift-item gift-link" href="https://api-shein.shein.com/h5/sharejump/appjump?link=laDuLDMgnIg_8_1&localcountry=BR&shc=2_laDuLDMgnIg" target="_blank" rel="noopener">
+                        <span class="gift-emoji">👟</span>
+                        <div class="gift-info">
+                            <strong>Tênis Esportivo Meninas — Sola Grossa</strong>
+                            <span>Número <b>31</b> — sola macia, casual/escola — SHEIN</span>
+                            <span class="gift-price gift-shein">SHEIN</span>
+                        </div>
+                        <span class="gift-ext">🔗</span>
+                    </a>
+
+                    <a class="gift-item gift-link" href="https://api-shein.shein.com/h5/sharejump/appjump?link=laDPiws99Iw_8_1&localcountry=BR&shc=2_laDPiws99Iw" target="_blank" rel="noopener">
+                        <span class="gift-emoji">👡</span>
+                        <div class="gift-info">
+                            <strong>Sandália Rasteira com Laço, Pérola e Strass</strong>
+                            <span>Número <b>30</b> — sapato de princesa — SHEIN</span>
+                            <span class="gift-price gift-shein">SHEIN</span>
+                        </div>
+                        <span class="gift-ext">🔗</span>
+                    </a>
+
+                    <a class="gift-item gift-link" href="https://api-shein.shein.com/h5/sharejump/appjump?link=laDPABtPVxb_8_1&localcountry=BR&shc=2_laDPABtPVxb" target="_blank" rel="noopener">
+                        <span class="gift-emoji">👗</span>
+                        <div class="gift-info">
+                            <strong>Conjunto Regata Coração + Shorts</strong>
+                            <span>Tamanho <b>8 anos</b> — primavera/verão — SHEIN</span>
+                            <span class="gift-price gift-shein">SHEIN</span>
+                        </div>
+                        <span class="gift-ext">🔗</span>
+                    </a>
+
+                    <a class="gift-item gift-link" href="https://api-shein.shein.com/h5/sharejump/appjump?link=laD765yffit_8_1&localcountry=BR&shc=2_laD765yffit" target="_blank" rel="noopener">
+                        <span class="gift-emoji">🐱</span>
+                        <div class="gift-info">
+                            <strong>Camiseta Manga Curta + Legging Laço de Gato</strong>
+                            <span>Tamanho <b>8 anos</b> — fofa demais! — SHEIN</span>
+                            <span class="gift-price gift-shein">SHEIN</span>
+                        </div>
+                        <span class="gift-ext">🔗</span>
+                    </a>
+
+                    <a class="gift-item gift-link" href="https://api-shein.shein.com/h5/sharejump/appjump?link=laDPMvPK5DB_8_1&localcountry=BR&shc=2_laDPMvPK5DB" target="_blank" rel="noopener">
+                        <span class="gift-emoji">🦄</span>
+                        <div class="gift-info">
+                            <strong>Conjunto Maiô Bikini Unicórnio</strong>
+                            <span>Bodysuit + Saída de Praia Tie Dye — SHEIN</span>
+                            <span class="gift-price gift-shein">SHEIN</span>
+                        </div>
+                        <span class="gift-ext">🔗</span>
+                    </a>
+
+                    <a class="gift-item gift-link" href="https://api-shein.shein.com/h5/sharejump/appjump?link=laDPfD0L7MV_8_1&localcountry=BR&shc=2_laDPfD0L7MV" target="_blank" rel="noopener">
+                        <span class="gift-emoji">🧦</span>
+                        <div class="gift-info">
+                            <strong>5 Pares de Meias de Lã Merino (Criança)</strong>
+                            <span>Alta elasticidade, outono/inverno — SHEIN</span>
+                            <span class="gift-price gift-shein">SHEIN</span>
+                        </div>
+                        <span class="gift-ext">🔗</span>
+                    </a>
+
+                    <a class="gift-item gift-link" href="https://api-shein.shein.com/h5/sharejump/appjump?link=laDuBIROZzH_8_1&localcountry=BR&shc=2_laDuBIROZzH" target="_blank" rel="noopener">
+                        <span class="gift-emoji">🦄</span>
+                        <div class="gift-info">
+                            <strong>Pijama Macacão de Unicórnio Arco-Íris</strong>
+                            <span>Kigurumi fantasia — fofo demais! — SHEIN</span>
+                            <span class="gift-price gift-shein">SHEIN</span>
+                        </div>
+                        <span class="gift-ext">🔗</span>
+                    </a>
+
+                    <!-- PIX -->
+                    <div class="pix-box" onclick="copyPix()" id="pixBox">
+                        <div class="pix-logo">💚 PIX</div>
+                        <div class="pix-details">
+                            <div class="pix-row"><span>Chave</span><strong id="pixKey">85992914551</strong></div>
+                            <div class="pix-row"><span>Nome</span><strong>Liana Moura Barroso</strong></div>
+                            <div class="pix-row"><span>Banco</span><strong>Inter 🧡</strong></div>
+                        </div>
+                        <div class="pix-copy-hint" id="pixHint">👆 Toque para copiar a chave PIX</div>
+                    </div>
+            <p class="footer-note">Espero você, meu amigo(a)! ❤️</p>
+        </div>
+    </div>
+</div>
+
+<!-- ============ PLAYER MÚSICA SÍTIO (oculto) ============ -->
+<div id="ytPlayerWrap" style="position:fixed;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none;bottom:0;left:0;">
+    <div id="ytPlayer"></div>
+</div>
+
+<!-- ============ BOTÕES FLUTUANTES ============ -->
+<div class="float-btns">
+    <button class="sound-btn"   id="soundBtn"   title="Sons da fazenda">🔊</button>
+    <button class="share-btn"   id="shareBtn"   title="Compartilhar no WhatsApp">📲</button>
+    <button class="piano-btn"   id="pianoBtn"   title="Tocar músiquinha">🎵</button>
+    <button class="rainbow-btn" id="rainbowBtn" title="Mostrar arco-íris">🌈</button>
+    <button class="music-bg-btn" id="musicBgBtn" title="Liga/desliga música do Sítio 🎶">🎼</button>
+</div>
+
+<!-- ============ FALLING ITEMS ============ -->
+<div class="falling-items" id="fallingItems"></div>
+
+<!-- ============ MOUSE TRAIL ============ -->
+<div class="mouse-trail" id="mouseTrail"></div>
+
+<!-- ============ TOAST ============ -->
+<div class="toast" id="toast"></div>
+
+<!-- ============ PIANO KEYS ============ -->
+<div class="piano-panel" id="pianoPanel">
+    <div class="piano-title">🎹 Toque uma música!</div>
+    <div class="piano-keys">
+        <div class="pk white" data-note="C4">Dó</div>
+        <div class="pk black" data-note="Cs4"></div>
+        <div class="pk white" data-note="D4">Ré</div>
+        <div class="pk black" data-note="Ds4"></div>
+        <div class="pk white" data-note="E4">Mi</div>
+        <div class="pk white" data-note="F4">Fá</div>
+        <div class="pk black" data-note="Fs4"></div>
+        <div class="pk white" data-note="G4">Sol</div>
+        <div class="pk black" data-note="Gs4"></div>
+        <div class="pk white" data-note="A4">Lá</div>
+        <div class="pk black" data-note="As4"></div>
+        <div class="pk white" data-note="B4">Si</div>
+        <div class="pk white" data-note="C5">Dó</div>
+    </div>
+    <div class="piano-auto-btns">
+        <button class="piano-play-btn" id="playHBD">🎂 Parabéns pra você!</button>
+        <button class="piano-play-btn" id="playJingle">🎅 Jingle Bells!</button>
+    </div>
+    <button class="piano-close" id="pianoClose">✕ Fechar</button>
+</div>
+
+<!-- ============================================================
+     MODAL: JOGO DA MEMÓRIA
+     ============================================================ -->
+<div class="modal-overlay" id="memoryModal" onclick="checkModalClose(event,'memoryModal')">
+    <div class="modal-box memory-modal-box">
+        <button class="modal-close" onclick="closeModal('memoryModal')">✕</button>
+        <h2 class="modal-title">🃏 Jogo da Memória da Fazendinha</h2>
+        <div class="memory-stats-bar">
+            <div class="mem-stat">⚡ Tentativas: <b id="memAttempts">0</b></div>
+            <div class="mem-stat">🏅 Pares: <b id="memPairs">0</b> / 8</div>
+            <div class="mem-stat" id="memTimerWrap">⏱ <b id="memTimer">00:00</b></div>
+        </div>
+        <div class="memory-grid" id="memoryGrid"></div>
+        <div class="memory-win-box" id="memoryWinBox" style="display:none">
+            <div class="mem-win-text">🎉 Você encontrou todos os pares!</div>
+            <div class="mem-win-score">Tentativas: <b id="memFinalAttempts">0</b> | Tempo: <b id="memFinalTime">00:00</b></div>
+            <button class="mem-play-again" onclick="startMemoryGame()">🔄 Jogar de Novo</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     MODAL: QUIZ DA FAZENDA
+     ============================================================ -->
+<div class="modal-overlay" id="quizModal" onclick="checkModalClose(event,'quizModal')">
+    <div class="modal-box quiz-modal-box">
+        <button class="modal-close" onclick="closeModal('quizModal')">✕</button>
+        <h2 class="modal-title">🌾 Quiz da Fazendinha</h2>
+        <div class="quiz-progress-wrap">
+            <div class="quiz-prog-fill" id="quizProgFill" style="width:0%"></div>
+            <span class="quiz-prog-label" id="quizProgLabel">1 / 8</span>
+        </div>
+        <div id="quizContent" class="quiz-content-area"></div>
+        <div class="quiz-score-box" id="quizScoreBox" style="display:none">
+            <div class="quiz-score-icon" id="quizScoreIcon">🏆</div>
+            <div class="quiz-score-msg" id="quizScoreMsg"></div>
+            <div class="quiz-score-pts">Pontuação: <b id="quizFinalScore">0</b> / 8</div>
+            <button class="quiz-restart" onclick="startQuiz()">🔄 Jogar de Novo</button>
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     MODAL: BOLO INTERATIVO
+     ============================================================ -->
+<div class="modal-overlay" id="cakeModal" onclick="checkModalClose(event,'cakeModal')">
+    <div class="modal-box cake-modal-box">
+        <button class="modal-close" onclick="closeModal('cakeModal')">✕</button>
+        <h2 class="modal-title">🎂 Bolo da Laura!</h2>
+        <p class="cake-subtitle">Clique nas velhinhas para apagá-las e fazer um pedido! ✨</p>
+        <div class="cake-wrapper">
+            <!-- Velas no topo -->
+            <div class="cake-candles-row" id="cakeCandlesRow">
+                <!-- gerado via JS: 7 velas -->
+            </div>
+            <!-- Camadas do bolo -->
+            <div class="cake-layer cake-l1">
+                <div class="cake-top-deco">🌸 7 Anos! 🌸</div>
+                <div class="cake-frosting-drips"></div>
+            </div>
+            <div class="cake-layer cake-l2">
+                <span>🐄</span><span>🐖</span><span>🌻</span><span>🐑</span><span>🐓</span>
+            </div>
+            <div class="cake-layer cake-l3">
+                <div class="cake-base-deco">❤️ Laura ❤️</div>
+            </div>
+            <div class="cake-plate"></div>
+        </div>
+        <div class="cake-msg-box" id="cakeMsgBox" style="display:none">
+            <div class="cake-msg-text" id="cakeMsgText"></div>
+        </div>
+        <div class="cake-candles-left" id="cakeCandlesLeft">🕯 7 velas restantes</div>
+    </div>
+</div>
+
+<!-- ============================================================
+     MODAL: LIVRO DE VISITAS
+     ============================================================ -->
+<div class="modal-overlay" id="guestModal" onclick="checkModalClose(event,'guestModal')">
+    <div class="modal-box guest-modal-box">
+        <button class="modal-close" onclick="closeModal('guestModal')">✕</button>
+        <h2 class="modal-title">📖 Livro de Visitas</h2>
+        <div class="guest-form-area">
+            <input  class="guest-input"    id="guestName" placeholder="Seu nome 🌸" maxlength="30" onclick="event.stopPropagation()">
+            <textarea class="guest-textarea" id="guestMsg"  placeholder="Deixe uma mensagem carinhosa para a Laura... 💕" maxlength="200" rows="3" onclick="event.stopPropagation()"></textarea>
+            <div class="guest-emoji-picker">
+                <span title="Coração"       onclick="addGuestEmoji('❤️')">❤️</span>
+                <span title="Parabéns"      onclick="addGuestEmoji('🎉')">🎉</span>
+                <span title="Flor"          onclick="addGuestEmoji('🌸')">🌸</span>
+                <span title="Unicórnio"     onclick="addGuestEmoji('🦄')">🦄</span>
+                <span title="Vaca"          onclick="addGuestEmoji('🐄')">🐄</span>
+                <span title="Estrela"       onclick="addGuestEmoji('⭐')">⭐</span>
+                <span title="Laço"          onclick="addGuestEmoji('🎀')">🎀</span>
+                <span title="Bolo"          onclick="addGuestEmoji('🍰')">🍰</span>
+                <span title="Beijo"         onclick="addGuestEmoji('💋')">💋</span>
+                <span title="Sol"           onclick="addGuestEmoji('🌻')">🌻</span>
+                <span title="Borboleta"     onclick="addGuestEmoji('🦋')">🦋</span>
+                <span title="Parabéns!"     onclick="addGuestEmoji('🥳')">🥳</span>
+            </div>
+            <button class="guest-submit-btn" onclick="submitGuestMsg();event.stopPropagation()">
+                💌 Enviar Mensagem
+            </button>
+        </div>
+        <div class="guest-msgs-list" id="guestMsgsList">
+            <!-- Mensagens carregadas via JS -->
+        </div>
+    </div>
+</div>
+
+<!-- ============================================================
+     ACHIEVEMENT (CONQUISTA) POPUP
+     ============================================================ -->
+<div class="achievement-popup" id="achievementPopup">
+    <div class="ach-left">
+        <div class="ach-icon" id="achIcon">🏆</div>
+    </div>
+    <div class="ach-right">
+        <div class="ach-label">✨ Conquista Desbloqueada!</div>
+        <div class="ach-title" id="achTitle">Título</div>
+        <div class="ach-desc"  id="achDesc">Descrição</div>
+    </div>
+</div>
+
+<!-- ============================================================
+     LOADING SCREEN
+     ============================================================ -->
+<div class="loading-screen" id="loadingScreen">
+    <div class="loading-barn">🏠</div>
+    <div class="loading-animals">🐄🐖🐑🐓</div>
+    <div class="loading-text">Abrindo as porteiras...<br><span id="loadingPct">0%</span></div>
+    <div class="loading-bar-wrap">
+        <div class="loading-bar-fill" id="loadingBarFill"></div>
+    </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
