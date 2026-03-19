@@ -580,7 +580,7 @@ document.getElementById('shareBtn').addEventListener('click', (e) => {
         '🐄🎉 *CONVITE — Fazendinha da Laura!* 🎉🐄\n\n' +
         'As porteiras da fazendinha vão se abrir para uma festa inesquecível!\n\n' +
         '🎂 *7 Aninhos da Laura!*\n' +
-        '📅 *01 de Abril — 16h30*\n' +
+        '📅 *02 de Abril — 16h30*\n' +
         '📍 *Rua Campo Verde, nº 35 — Lagoinha*\n\n' +
         'Venha comemorar com muita alegria! 🐖🐑🐓🌻'
     );
